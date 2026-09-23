@@ -475,34 +475,32 @@
       <circle class="fill-brass" cx="12" cy="4" r="1.6"/>
     </symbol>
   
-    <symbol id="i-durga" viewBox="0 0 64 64">
+    <symbol id="i-durga" viewBox="3 3 124 124">
       <defs>
-        <radialGradient id="dgBg" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="#C8202C"/><stop offset="1" stop-color="#4A0812"/></radialGradient>
-        <linearGradient id="dgGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7A6"/><stop offset="1" stop-color="#D9A431"/></linearGradient>
-        <clipPath id="dgClip"><circle cx="32" cy="32" r="30"/></clipPath>
-      </defs>
-      <circle cx="32" cy="32" r="31" fill="url(#dgBg)"/>
-      <g clip-path="url(#dgClip)">
-        <g stroke="#F5CF7A" stroke-width=".8" opacity=".55" stroke-linecap="round">
-          <path d="M32 2v6M12 10l4 4.5M52 10l-4 4.5M3 30h6M55 30h6"/>
+        <radialGradient id="dgeBg" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#FFF8EA"/><stop offset="1" stop-color="#FFDDB4"/></radialGradient>
+        <g id="dgeBrow"><path d="M13.8 39.8C30 43 46 47 55 55C58 58 60 62 60.8 66C56 59 44 53 30 48.5C24 46.5 18 43.5 13.8 39.8Z"/></g>
+        <g id="dgeEye">
+          <path d="M13.8 54.8C22 56.5 34 58 44 62C50 64.5 53 68 54.8 73C48 76 40 75.5 32 74C24 72 16 64 13.8 54.8Z"/>
+          <path d="M21.5 59.8C32 59 44 63 50.5 71.5C44 74 36 73 30 70C26 67.5 22 64 21.5 59.8Z" fill="#fff"/>
+          <circle cx="39.2" cy="68" r="5.6"/><circle cx="36.6" cy="65.4" r="1.5" fill="#fff"/>
         </g>
-        <circle cx="32" cy="30" r="21" fill="rgba(245,207,122,.16)" stroke="#F5CF7A" stroke-width=".9"/>
-        <circle cx="32" cy="30" r="17.5" fill="none" stroke="#F5CF7A" stroke-width=".6" stroke-dasharray=".1 2.2" stroke-linecap="round"/>
-        <path d="M11 56V22M7.5 27.5q3.5 3.5 7 0M7.5 27.5v-7M14.5 27.5v-7M11 27.5v-11" stroke="url(#dgGold)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M14 68V58c1-10 8-15 18-15s17 5 18 15v10z" fill="#8E1420" stroke="#F5CF7A" stroke-width=".8"/>
-        <path d="M25.5 44.5q6.5 5.5 13 0" fill="none" stroke="url(#dgGold)" stroke-width="1.6" stroke-linecap="round"/>
-        <path d="M21.5 23.5l1.8-10.5 4.4 4.6L32 9l4.3 8.6 4.4-4.6 1.8 10.5z" fill="url(#dgGold)" stroke="#B0781A" stroke-width=".5"/>
-        <circle cx="32" cy="16.2" r="1.3" fill="#D3202B"/>
-        <ellipse cx="32" cy="31" rx="8.6" ry="10.6" fill="#FFDFBE"/>
-        <path d="M23.4 27c1.4-4.6 5-6 8.6-6s7.2 1.4 8.6 6c-3-2.4-5.6-3.2-8.6-3.2s-5.6.8-8.6 3.2z" fill="#3A0A10"/>
-        <path d="M26 27.2q2.6-1.6 5-.3M38 27.2q-2.6-1.6-5-.3" stroke="#3A0A10" stroke-width=".9" fill="none" stroke-linecap="round"/>
-        <path d="M26.6 29.6q2.2-1.5 4.4 0M33 29.6q2.2-1.5 4.4 0" stroke="#4A0812" stroke-width="1" fill="none" stroke-linecap="round"/>
-        <circle cx="32" cy="25.4" r="1.3" fill="#D3202B"/>
-        <path d="M32 30.4v3.4q-1 .8-2 .1" stroke="#C98A6A" stroke-width=".7" fill="none" stroke-linecap="round"/>
-        <path d="M29.6 36.4q2.4 2 4.8 0q-2.4-.9-4.8 0z" fill="#C4233A"/>
-        <circle cx="23.1" cy="33.4" r="1.4" fill="url(#dgGold)"/><circle cx="40.9" cy="33.4" r="1.4" fill="url(#dgGold)"/>
+      </defs>
+      <circle cx="65" cy="65" r="62" fill="url(#dgeBg)"/>
+      <circle cx="65" cy="65" r="57.6" fill="none" stroke="#B3121F" stroke-width=".9" stroke-dasharray=".1 2.4" stroke-linecap="round"/>
+      <g fill="#111">
+        <use href="#dgeBrow"/><use href="#dgeBrow" transform="translate(130 0) scale(-1 1)"/>
+        <use href="#dgeEye"/><use href="#dgeEye" transform="translate(130 0) scale(-1 1)"/>
+        <path d="M54 39.5C54 46 58 52 65 52C72 52 76 46 76 39.5C74.5 46 70.5 49.8 65 49.8C59.5 49.8 55.5 46 54 39.5Z"/>
       </g>
-      <circle cx="32" cy="32" r="30.6" fill="none" stroke="#E2B04A" stroke-width="1.4"/>
+      <path d="M65 15.8C58 24 55.5 31 55.5 37C55.5 44 60 47 65 48.2C70 47 74.5 44 74.5 37C74.5 31 72 24 65 15.8Z" fill="none" stroke="#111" stroke-width="2.2" stroke-linejoin="round"/>
+      <circle cx="65" cy="35.5" r="5" fill="#F01B24"/><circle cx="65" cy="58.8" r="4.3" fill="#F01B24"/>
+      <path d="M57 91.5C56.5 96 58 98 61 96.5C63 98.5 66 99 69 97C71 95.5 72.5 93.5 73 91.5" fill="none" stroke="#111" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M50.8 106.5C56 103.2 60 103.2 63 104.6C64.6 105.3 66 105.3 67.5 104.6C71 103 75 103.2 79 106.3C74 112.6 68 114.5 63.5 114.5C58 114.5 54 111.5 50.8 106.5Z" fill="#F01B24"/>
+      <path d="M51 106.6C58 108.5 72 108.5 79 106.3" fill="none" stroke="#A80A14" stroke-width=".8"/>
+      <circle cx="86" cy="94.8" r="15.5" fill="none" stroke="#F7C518" stroke-width="1.9"/>
+      <circle cx="100.4" cy="100.6" r="2.5" fill="#F7C518"/><circle cx="97.9" cy="104.8" r="2.8" fill="#E8262B"/><circle cx="94.2" cy="108" r="2.4" fill="#F7C518"/>
+      <circle cx="101.3" cy="97.5" r="1.2" fill="#2E9E4F"/><circle cx="91.8" cy="109.2" r="1.1" fill="#2E9E4F"/>
+      <circle cx="65" cy="65" r="61.2" fill="none" stroke="#E2B04A" stroke-width="2.6"/>
     </symbol>
   </defs>
 </svg>

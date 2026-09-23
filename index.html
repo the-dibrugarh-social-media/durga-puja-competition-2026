@@ -328,6 +328,52 @@
   .scroll-box::-webkit-scrollbar{width:7px;}
   .scroll-box::-webkit-scrollbar-track{background:rgba(0,0,0,.3); border-radius:8px;}
   .scroll-box::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold-light),var(--gold)); border-radius:8px;}
+
+  /* ---------- Google button frame ---------- */
+  .g-frame{width:100%; max-width:400px; margin:0 auto; padding:2px; border-radius:9px;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold) 45%,var(--red));
+    box-shadow:0 8px 22px -12px rgba(0,0,0,.8), 0 0 22px -10px rgba(201,162,39,.55);}
+  .g-frame #gSignInDiv{background:#131314; border-radius:7px; overflow:hidden; min-height:44px; color-scheme:dark;}
+  .g-note{text-align:center; margin-top:9px;}
+
+  /* ---------- follow checkbox ---------- */
+  .follow-check{display:flex; align-items:flex-start; gap:11px; padding:11px 12px; cursor:pointer;
+    border:1.5px solid var(--bronze); border-radius:6px; background:var(--bg-deep); font-size:13.5px; line-height:1.45;}
+  .follow-check:hover{border-color:var(--gold);}
+  .follow-check input{-webkit-appearance:none; appearance:none; flex:none; width:22px; height:22px; margin:1px 0 0; cursor:pointer;
+    border:2px solid var(--gold); border-radius:5px; background:transparent; display:grid; place-content:center;}
+  .follow-check input::after{content:""; width:11px; height:6px; border-left:2.5px solid var(--bg-deep); border-bottom:2.5px solid var(--bg-deep);
+    transform:rotate(-45deg) translate(1px,-1px) scale(0); transition:transform .12s;}
+  .follow-check input:checked{background:linear-gradient(155deg,var(--gold-light),var(--gold));}
+  .follow-check input:checked::after{transform:rotate(-45deg) translate(1px,-1px) scale(1);}
+  .follow-check input:focus-visible{outline:2px solid var(--gold-light); outline-offset:2px;}
+  .follow-check a{color:var(--gold-light); font-weight:700; text-decoration:underline; text-underline-offset:2px;}
+
+  /* ---------- rules pop-up ---------- */
+  .modal{position:fixed; inset:0; z-index:30; display:grid; place-items:center; padding:16px;}
+  .modal[hidden]{display:none;}
+  .modal-backdrop{position:absolute; inset:0; background:rgba(22,0,5,.74); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);}
+  .modal-card{position:relative; width:100%; max-width:420px; max-height:calc(100dvh - 32px); overflow:auto; outline:none;
+    padding:24px 20px 20px; border-radius:14px; border:1.5px solid var(--gold);
+    background:radial-gradient(circle at 50% -10%, rgba(201,162,39,.18), transparent 55%), var(--panel);
+    box-shadow:0 26px 60px -20px rgba(0,0,0,.9), 0 0 34px -14px rgba(201,162,39,.5);}
+  .modal-card::before{content:""; position:absolute; right:-70px; top:-70px; width:190px; aspect-ratio:1; pointer-events:none;
+    background:var(--mandala) center/contain no-repeat; opacity:.16;}
+  .modal-card > *{position:relative;}
+  .modal-card h2{font-family:'Kaushan Script',cursive; font-weight:400; font-size:28px; color:#FFF6EA; text-align:center;}
+  .modal-for{text-align:center; font-size:13.5px; color:var(--ink-soft); margin:6px 0 16px;}
+  .modal-for strong{color:var(--gold-light);}
+  .rules-list{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:10px; font-size:13px; line-height:1.5;}
+  .rules-list li{position:relative; padding-left:20px;}
+  .rules-list li::before{content:""; position:absolute; left:2px; top:.5em; width:7px; height:7px; border-radius:50%; background:var(--gold);}
+  .rules-list b{color:var(--gold-light);}
+  .modal-actions{display:flex; flex-direction:column; gap:10px;}
+  .modal-go{width:100%; padding:13px 18px 13px 22px; font-size:14px; text-align:center;}
+  .btn-ghost{width:100%; padding:11px; border-radius:6px; cursor:pointer; font-size:13.5px; font-weight:600;
+    background:transparent; color:var(--ink-soft); border:1px solid var(--bronze);}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--ink);}
+  .modal button:focus-visible{outline:2px solid var(--gold-light); outline-offset:2px;}
+  .toast{z-index:40;}
 </style>
 </head>
 <body>
@@ -417,13 +463,14 @@
         <div class="seal"><svg class="icon" viewBox="0 0 24 24"><use href="#i-trishul"/></svg></div>
         <div>
           <h2>Before You Vote</h2>
-          <div class="sub">Just two steps — ten seconds, promise</div>
+          <div class="sub">Just three quick steps — ten seconds, promise</div>
         </div>
       </div>
 
       <div class="gate-step">
         <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Sign in with Google</div>
-        <div id="gSignInDiv"></div>
+        <div class="g-frame" id="gFrame"><div id="gSignInDiv"></div></div>
+        <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div>
         <div class="signed-in-pill" id="signedInPill">
           <span>✅</span> Signed in as <strong id="signedInName">—</strong>
         </div>
@@ -442,6 +489,14 @@
           We also record basic, non-personal device information with your vote
           solely to help flag duplicate voting.
         </div>
+      </div>
+
+      <div class="gate-step">
+        <div class="gate-label"><span class="gate-check" id="checkFollow">✓</span> Follow us on Instagram</div>
+        <label class="follow-check">
+          <input type="checkbox" id="followBox" />
+          <span>I have followed <a href="https://www.instagram.com/the_dibrugarh" target="_blank" rel="noopener">@the_dibrugarh</a> on Instagram</span>
+        </label>
       </div>
     </div>
   </div>
@@ -517,6 +572,24 @@
 
 </div>
 
+<div class="modal" id="rulesModal" hidden role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+  <div class="modal-backdrop"></div>
+  <div class="modal-card" tabindex="-1">
+    <h2 id="rulesTitle">Before you submit</h2>
+    <p class="modal-for">You are voting for <strong id="rulesPandal">—</strong></p>
+    <ul class="rules-list">
+      <li><b>One vote per person.</b> Duplicate votes — same Google account, Instagram handle or device — will be deleted.</li>
+      <li><b>Fake votes will be removed,</b> including votes from accounts that don't follow @the_dibrugarh.</li>
+      <li>Once submitted, your vote can't be changed.</li>
+      <li>To catch fake and duplicate votes, we store your verified Google login email, your Instagram handle and a device fingerprint with your vote. We never see your Google password.</li>
+    </ul>
+    <div class="modal-actions">
+      <button type="button" class="vote-btn modal-go" id="rulesConfirm">I understand, Submit vote</button>
+      <button type="button" class="btn-ghost" id="rulesDiscard">Discard</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -587,16 +660,21 @@ function handleCredentialResponse(response){
   document.getElementById("checkGoogle").classList.add("done");
   document.getElementById("signedInPill").classList.add("show");
   document.getElementById("signedInName").textContent = (payload && (payload.name || payload.email)) || "your Google account";
-  document.getElementById("gSignInDiv").style.display = "none";
+  document.getElementById("gFrame").style.display = "none";
   refreshVoteReadiness();
 }
 
-window.addEventListener("load", () => {
+function initGoogle(tries){
   if(window.google && google.accounts && google.accounts.id){
     google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
-    google.accounts.id.renderButton(document.getElementById("gSignInDiv"), { theme:"filled_black", size:"large", shape:"pill", text:"signin_with" });
+    const w = Math.max(200, Math.min(400, document.getElementById("gFrame").clientWidth - 4));
+    google.accounts.id.renderButton(document.getElementById("gSignInDiv"),
+      { theme:"filled_black", size:"large", shape:"rectangular", text:"continue_with", logo_alignment:"left", width:w });
+  } else if(tries < 30){
+    setTimeout(() => initGoogle(tries + 1), 300);
   }
-});
+}
+window.addEventListener("load", () => initGoogle(0));
 
 const instaInput = document.getElementById("instaHandle");
 instaInput.addEventListener("input", refreshVoteReadiness);
@@ -662,11 +740,40 @@ async function loadPandals(){
   }
 }
 
-async function onVoteClick(btn){
+const followBox = document.getElementById("followBox");
+followBox.addEventListener("change", () => document.getElementById("checkFollow").classList.toggle("done", followBox.checked));
+
+const modal = document.getElementById("rulesModal");
+let pendingVote = null;
+function openRules(p){
+  pendingVote = p;
+  document.getElementById("rulesPandal").textContent = p.name;
+  modal.hidden = false;
+  document.body.style.overflow = "hidden";
+  modal.querySelector(".modal-card").focus();
+}
+function closeRules(){
+  modal.hidden = true; pendingVote = null; document.body.style.overflow = "";
+}
+document.getElementById("rulesDiscard").addEventListener("click", closeRules);
+modal.querySelector(".modal-backdrop").addEventListener("click", closeRules);
+document.getElementById("rulesConfirm").addEventListener("click", () => { const p = pendingVote; closeRules(); if(p) submitVote(p); });
+document.addEventListener("keydown", ev => {
+  if(modal.hidden) return;
+  if(ev.key === "Escape") closeRules();
+  if(ev.key === "Tab"){
+    const f = Array.from(modal.querySelectorAll("button")), a = document.activeElement;
+    if(ev.shiftKey && (a === f[0] || a === modal.querySelector(".modal-card"))){ ev.preventDefault(); f[f.length - 1].focus(); }
+    else if(!ev.shiftKey && a === f[f.length - 1]){ ev.preventDefault(); f[0].focus(); }
+  }
+});
+
+// Pressing Vote checks the three steps first, then shows the rules pop-up.
+function onVoteClick(btn){
   if(selectedVoted || busyId !== null) return;
   if(!idToken){
     showToast("Please sign in with Google first.");
-    document.getElementById("gSignInDiv").scrollIntoView({behavior:"smooth", block:"center"});
+    document.getElementById("gFrame").scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
   const handle = currentHandle();
@@ -675,19 +782,28 @@ async function onVoteClick(btn){
     instaInput.focus();
     return;
   }
-  const id = btn.dataset.id, name = btn.dataset.name;
-  busyId = id; renderPandals();
+  if(!followBox.checked){
+    showToast("Please follow @the_dibrugarh and tick the box first.");
+    followBox.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  openRules({ id: btn.dataset.id, name: btn.dataset.name, handle: handle });
+}
+
+async function submitVote(p){
+  busyId = p.id; renderPandals();
   try{
     const deviceFingerprint = await computeDeviceFingerprint_();
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ idToken: idToken, instagramHandle: handle, pandalId: id, pandalName: name, deviceFingerprint: deviceFingerprint })
+      body: JSON.stringify({ idToken: idToken, instagramHandle: p.handle, pandalId: p.id, pandalName: p.name,
+        deviceFingerprint: deviceFingerprint, followConfirmed: true, rulesAccepted: true })
     });
     const data = await res.json();
     busyId = null;
     if(data.status === "success"){
-      selectedVoted = true; votedId = id; renderPandals();
-      document.getElementById("votedFor").textContent = name;
+      selectedVoted = true; votedId = p.id; renderPandals();
+      document.getElementById("votedFor").textContent = p.name;
       const ty = document.getElementById("thankyouCard");
       ty.classList.add("show");
       ty.scrollIntoView({behavior:"smooth", block:"center"});

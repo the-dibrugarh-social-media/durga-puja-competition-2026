@@ -313,6 +313,21 @@
   .card-inner::before{width:190px; right:-84px; top:-84px; opacity:.16;}
   .card-inner::after{width:150px; left:-70px; bottom:-70px; opacity:.13;}
   .card-inner > *{position:relative; z-index:1;}
+
+  /* ---------- pandal search + scrolling lists ---------- */
+  .pandal-search{display:flex; align-items:center; gap:9px; padding:0 12px; margin-bottom:8px;
+    border:1.5px solid var(--bronze); border-radius:6px; background:var(--bg-deep);}
+  .pandal-search:focus-within{border-color:var(--gold);}
+  .pandal-search svg{width:17px; height:17px; flex:none; fill:none; stroke:var(--gold); stroke-width:1.8; stroke-linecap:round;}
+  .pandal-search input{flex:1; min-width:0; border:none; outline:none; background:transparent; color:var(--ink);
+    padding:11px 0; font-size:14.5px; font-family:'Inter',sans-serif;}
+  .pandal-search input::placeholder{color:rgba(255,235,210,0.4);}
+  .pandal-meta{font-size:11.5px; color:var(--ink-soft); margin:0 2px 8px;}
+  .scroll-box{max-height:min(52vh,380px); overflow-y:auto; overscroll-behavior:contain; padding:2px 6px 2px 2px;
+    scrollbar-width:thin; scrollbar-color:var(--gold) rgba(0,0,0,.3);}
+  .scroll-box::-webkit-scrollbar{width:7px;}
+  .scroll-box::-webkit-scrollbar-track{background:rgba(0,0,0,.3); border-radius:8px;}
+  .scroll-box::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--gold-light),var(--gold)); border-radius:8px;}
 </style>
 </head>
 <body>
@@ -441,8 +456,15 @@
           <div class="sub">One vote per person — make it count</div>
         </div>
       </div>
-      <div class="pandal-grid" id="pandalGrid">
-        <div class="pandal-loading">Loading pandals…</div>
+      <label class="pandal-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <input type="search" id="pandalSearch" placeholder="Search pandal or area" autocomplete="off" spellcheck="false" aria-label="Search pandals" />
+      </label>
+      <div class="pandal-meta" id="pandalMeta"></div>
+      <div class="scroll-box">
+        <div class="pandal-grid" id="pandalGrid">
+          <div class="pandal-loading">Loading pandals…</div>
+        </div>
       </div>
     </div>
   </div>
@@ -466,7 +488,8 @@
           <div class="sub">Updates live as the votes come in</div>
         </div>
       </div>
-      <div id="resultsContainer">
+      <div class="pandal-meta" id="resultsMeta"></div>
+      <div id="resultsContainer" class="scroll-box">
         <div class="result-loading">Loading current standings…</div>
       </div>
     </div>
@@ -597,40 +620,50 @@ function crownFor(i){
   return '';
 }
 
+let busyId = null, votedId = null;
+const esc = t => String(t == null ? "" : t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const searchEl = document.getElementById("pandalSearch");
+const gridEl = document.getElementById("pandalGrid");
+
+function renderPandals(){
+  const meta = document.getElementById("pandalMeta");
+  const q = searchEl.value.trim().toLowerCase();
+  const list = q ? pandals.filter(p => (p.name + " " + (p.area || "")).toLowerCase().includes(q)) : pandals;
+  meta.textContent = pandals.length ? (q ? `${list.length} of ${pandals.length} pandals` : `${pandals.length} pandals — scroll to see all`) : "";
+  if(!list.length){
+    gridEl.innerHTML = `<div class="pandal-empty">${pandals.length ? "No pandal matches your search." : "Pandals will be listed here shortly — please check back soon."}</div>`;
+    return;
+  }
+  const locked = busyId !== null || selectedVoted;
+  gridEl.innerHTML = list.map(p => {
+    const isVoted = votedId !== null && String(p.id) === String(votedId);
+    const isBusy = busyId !== null && String(p.id) === String(busyId);
+    return `<div class="pandal-card">
+      <img class="pandal-thumb" src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="pandal-info"><div class="pandal-name">${esc(p.name)}</div><div class="pandal-area">${esc(p.area)}</div></div>
+      <button class="vote-btn${isVoted ? " voted" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : "Vote"}</button>
+    </div>`;
+  }).join("");
+}
+searchEl.addEventListener("input", renderPandals);
+gridEl.addEventListener("click", ev => {
+  const b = ev.target.closest(".vote-btn");
+  if(b && !b.disabled) onVoteClick(b);
+});
+
 async function loadPandals(){
-  const grid = document.getElementById("pandalGrid");
   try{
     const res = await fetch(SCRIPT_URL + "?pandals=1");
     const data = await res.json();
     pandals = (data.pandals || []).filter(p => p.active);
-    if(pandals.length === 0){
-      grid.innerHTML = `<div class="pandal-empty">Pandals will be listed here shortly — please check back soon.</div>`;
-      return;
-    }
-    grid.innerHTML = "";
-    pandals.forEach(p => {
-      const row = document.createElement("div");
-      row.className = "pandal-card";
-      row.innerHTML = `
-        <img class="pandal-thumb" src="${p.img || ''}" alt="${p.name}" onerror="this.style.visibility='hidden'">
-        <div class="pandal-info">
-          <div class="pandal-name">${p.name}</div>
-          <div class="pandal-area">${p.area || ''}</div>
-        </div>
-        <button class="vote-btn" data-id="${p.id}" data-name="${p.name}">Vote</button>
-      `;
-      grid.appendChild(row);
-    });
-    grid.querySelectorAll(".vote-btn").forEach(btn => btn.addEventListener("click", onVoteClick));
+    renderPandals();
   }catch(e){
-    grid.innerHTML = `<div class="pandal-empty">Could not load pandals — please refresh the page.</div>`;
+    gridEl.innerHTML = `<div class="pandal-empty">Could not load pandals — please refresh the page.</div>`;
   }
 }
 
-async function onVoteClick(ev){
-  if(selectedVoted) return;
-  const btn = ev.currentTarget;
-
+async function onVoteClick(btn){
+  if(selectedVoted || busyId !== null) return;
   if(!idToken){
     showToast("Please sign in with Google first.");
     document.getElementById("gSignInDiv").scrollIntoView({behavior:"smooth", block:"center"});
@@ -642,71 +675,60 @@ async function onVoteClick(ev){
     instaInput.focus();
     return;
   }
-
-  document.querySelectorAll(".vote-btn").forEach(b => b.disabled = true);
-  btn.textContent = "Voting…";
-
+  const id = btn.dataset.id, name = btn.dataset.name;
+  busyId = id; renderPandals();
   try{
     const deviceFingerprint = await computeDeviceFingerprint_();
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({
-        idToken: idToken,
-        instagramHandle: handle,
-        pandalId: btn.dataset.id,
-        pandalName: btn.dataset.name,
-        deviceFingerprint: deviceFingerprint
-      })
+      body: JSON.stringify({ idToken: idToken, instagramHandle: handle, pandalId: id, pandalName: name, deviceFingerprint: deviceFingerprint })
     });
     const data = await res.json();
-
+    busyId = null;
     if(data.status === "success"){
-      selectedVoted = true;
-      btn.classList.add("voted");
-      btn.textContent = "Voted ✓";
-      document.getElementById("votedFor").textContent = btn.dataset.name;
-      document.getElementById("thankyouCard").classList.add("show");
-      document.getElementById("thankyouCard").scrollIntoView({behavior:"smooth", block:"center"});
+      selectedVoted = true; votedId = id; renderPandals();
+      document.getElementById("votedFor").textContent = name;
+      const ty = document.getElementById("thankyouCard");
+      ty.classList.add("show");
+      ty.scrollIntoView({behavior:"smooth", block:"center"});
       loadResults();
     } else if(data.status === "duplicate"){
-      selectedVoted = true;
-      showToast("This Google account has already voted.");
-      btn.textContent = "Already voted";
+      selectedVoted = true; renderPandals();
+      showToast(data.message || "This Google account has already voted.");
     } else {
+      renderPandals();
       showToast(data.message || "Something went wrong — please try again.");
-      document.querySelectorAll(".vote-btn").forEach(b => { if(!selectedVoted) b.disabled = false; });
-      btn.textContent = "Vote";
     }
   }catch(e){
+    busyId = null; renderPandals();
     showToast("Network error — please try again.");
-    document.querySelectorAll(".vote-btn").forEach(b => { if(!selectedVoted) b.disabled = false; });
-    btn.textContent = "Vote";
   }
 }
 
 async function loadResults(){
   const el = document.getElementById("resultsContainer");
+  const meta = document.getElementById("resultsMeta");
   try{
-    const res = await fetch(SCRIPT_URL);
+    const res = await fetch(SCRIPT_URL + "?t=" + Date.now());
     const counts = await res.json();
-    const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-    if(sorted.length === 0){
+    if(counts && counts.status === "error") throw new Error(counts.message);
+    const rows = pandals.map(p => ({ p: p, n: Number(counts[p.id]) || 0 }))
+      .sort((a, b) => b.n - a.n || String(a.p.name).localeCompare(String(b.p.name)));
+    const total = rows.reduce((t, r) => t + r.n, 0);
+    meta.textContent = total ? `${total} ${total === 1 ? "vote" : "votes"} so far` : "";
+    if(total === 0){
       el.innerHTML = `<p class="result-loading">No votes yet — be the first!</p>`;
       return;
     }
-    el.innerHTML = "";
-    sorted.slice(0, 10).forEach(([id, count], i) => {
-      const pData = pandals.find(p => p.id.toString() === id.toString());
-      const pName = pData ? pData.name : "Unknown Puja";
-      const row = document.createElement("div");
-      row.className = "rank-row" + (i === 0 ? " winner" : "");
-      row.innerHTML = `
-        <div class="rank-num">${i+1}</div>
-        <div class="rank-name">${crownFor(i)}${pName}</div>
-        <div class="rank-count">${count} votes</div>
-      `;
-      el.appendChild(row);
-    });
+    let rank = 0, prev = null;
+    el.innerHTML = rows.map((r, i) => {
+      if(r.n !== prev){ rank = i + 1; prev = r.n; }
+      return `<div class="rank-row${rank === 1 ? " winner" : ""}">
+        <div class="rank-num">${rank}</div>
+        <div class="rank-name">${crownFor(rank - 1)}${esc(r.p.name)}</div>
+        <div class="rank-count">${r.n} ${r.n === 1 ? "vote" : "votes"}</div>
+      </div>`;
+    }).join("");
   }catch(e){
     el.innerHTML = `<p class="result-loading">Could not load standings right now.</p>`;
   }
@@ -715,6 +737,7 @@ async function loadResults(){
 window.addEventListener("DOMContentLoaded", async () => {
   await loadPandals();
   loadResults();
+  setInterval(() => { if(!document.hidden) loadResults(); }, 15000);
 });
 </script>
 </body>

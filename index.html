@@ -357,6 +357,13 @@
   @keyframes tSwing{0%,100%{transform:rotate(-1.2deg);}50%{transform:rotate(1.2deg);}}
   .toran{transform-origin:50% 0; animation:tSwing 6s ease-in-out infinite;}
   @media (prefers-reduced-motion: reduce){ .toran{animation:none;} }
+
+  .ig-cta{display:flex; align-items:center; gap:12px; margin:4px 0 14px; padding:14px 16px; border-radius:16px; text-decoration:none; color:#fff;
+    background:linear-gradient(135deg,#B10F1E,#E8642A 55%,#E8A33D); border:1px solid rgba(255,246,234,.55); box-shadow:0 6px 18px rgba(20,0,4,.45); position:relative; z-index:1;}
+  .ig-cta .ig-ico{font-size:28px; flex:none;}
+  .ig-cta .ig-txt{display:flex; flex-direction:column; line-height:1.3;}
+  .ig-cta b{font-size:17px; letter-spacing:.2px;} .ig-cta small{font-size:12.5px; opacity:.95;}
+  .ig-cta:active{transform:scale(.98);}
   /* Assam: rhino + xorai motifs */
   .assam-row{display:flex; align-items:flex-end; justify-content:center; gap:14px; margin:14px auto 2px; position:relative; z-index:1;}
   .assam-row svg{display:block; filter:drop-shadow(0 3px 6px rgba(20,0,4,.55));}
@@ -473,6 +480,14 @@
   .modal-card h2{font-family:'Kaushan Script',cursive; font-weight:400; font-size:28px; color:#FFF6EA; text-align:center;}
   .modal-for{text-align:center; font-size:13.5px; color:var(--ink-soft); margin:6px 0 16px;}
   .modal-for strong{color:var(--gold-light);}
+
+  .warn-loud{margin:4px 0 14px; padding:12px 14px; border-radius:12px; text-align:center; color:#fff;
+    background:linear-gradient(135deg,#C4121F,#8E0A14); border:2px solid #FFD36B; box-shadow:0 0 0 3px rgba(196,18,31,.35), 0 6px 16px rgba(0,0,0,.4);
+    animation:warnPulse 1.8s ease-in-out infinite;}
+  .warn-title{font-weight:800; font-size:16px; letter-spacing:.6px; color:#FFE9A8; text-transform:uppercase;}
+  .warn-body{margin-top:6px; font-size:13.5px; line-height:1.45; font-weight:500;} .warn-body b{color:#FFE9A8; font-weight:800;}
+  @keyframes warnPulse{0%,100%{box-shadow:0 0 0 3px rgba(196,18,31,.35), 0 6px 16px rgba(0,0,0,.4);}50%{box-shadow:0 0 0 6px rgba(255,211,107,.45), 0 6px 20px rgba(0,0,0,.5);}}
+  @media (prefers-reduced-motion: reduce){ .warn-loud{animation:none;} }
   .rules-list{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:10px; font-size:13px; line-height:1.5;}
   .rules-list li{position:relative; padding-left:20px;}
   .rules-list li::before{content:""; position:absolute; left:2px; top:.5em; width:7px; height:7px; border-radius:50%; background:var(--gold);}
@@ -691,6 +706,10 @@
   </header>
 
   <!-- STEP 1 & 2: SIGN IN + INSTAGRAM GATE -->
+  <a class="ig-cta" href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener">
+    <span class="ig-ico">📸</span>
+    <span class="ig-txt"><b>Follow @the_dibrugarh</b><small>Winners &amp; results announced only on Instagram</small></span>
+  </a>
   <div class="card">
     <div class="card-inner">
       <div class="card-head">
@@ -713,7 +732,7 @@
       <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
       <div class="gate-step">
         <div class="gate-label"><span class="gate-check" id="checkFollow">✓</span> Follow us on Instagram</div>
-        <div class="ig-qr"><div id="igqr"></div><span>Scan to follow<br><b>@the_dibrugarh</b></span></div>
+        <div class="ig-qr"><div id="igqr"></div><span>Follow <b>@the_dibrugarh</b><br>for results &amp; winners</span></div>
         <label class="follow-check">
           <input type="checkbox" id="followBox" />
           <span>I have followed <a href="https://www.instagram.com/the_dibrugarh" target="_blank" rel="noopener">@the_dibrugarh</a> on Instagram</span>
@@ -824,7 +843,7 @@
       <svg class="am-rhino flip" viewBox="0 0 120 70"><use href="#i-rhino"/></svg>
     </div>
   <div class="gamusa-strip gs-thin gs-end" aria-hidden="true"></div>
-  <div class="dev-credit">Made by Zafer with love <span class="heart">♥</span></div>
+  <div class="dev-credit">Developed by Zafer with love <span class="heart">♥</span></div>
 </div>
 
 <div class="modal" id="rulesModal" hidden role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
@@ -832,6 +851,10 @@
   <div class="modal-card" tabindex="-1">
     <h2 id="rulesTitle">Before you submit</h2>
     <p class="modal-for">You are voting for <strong id="rulesPandal">—</strong></p>
+    <div class="warn-loud" role="alert">
+      <div class="warn-title">⚠️ FAKE VOTES WILL BE DELETED</div>
+      <div class="warn-body">Only accounts that <b>FOLLOW @the_dibrugarh</b> on Instagram are allowed to vote. <b>Not following = your vote will be removed.</b></div>
+    </div>
     <ul class="rules-list">
       <li><b>One vote per person.</b> Duplicate votes — same Google account or device — will be deleted.</li>
       <li><b>Fake votes will be removed,</b> including votes from people who don't follow @the_dibrugarh.</li>

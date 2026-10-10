@@ -452,6 +452,18 @@
     box-shadow:0 8px 22px -12px rgba(0,0,0,.8), 0 0 22px -10px rgba(201,162,39,.55);}
   .g-frame #gSignInDiv{background:#131314; border-radius:7px; overflow:hidden; min-height:44px; color-scheme:dark;}
   .g-note{text-align:center; margin-top:9px;}
+  /* Instagram-first gate */
+  .ig-step-btn{display:block; text-align:center; padding:13px 14px; margin:10px 0 8px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; text-decoration:none;
+    background:linear-gradient(135deg,#B10F1E,#E8642A 55%,#E8A33D); border:1px solid rgba(255,246,234,.55); box-shadow:0 4px 12px rgba(20,0,4,.35);}
+  .ig-step-btn.tapped{background:var(--panel-glow); color:var(--gold-light); border-color:var(--bronze); box-shadow:none;}
+  .follow-check.is-disabled{opacity:.45; cursor:not-allowed;}
+  .follow-check.is-disabled input{cursor:not-allowed;}
+  .gate-locked .g-frame{opacity:.45;}
+  .g-placeholder{padding:13px 12px; text-align:center; font-size:13px; color:var(--ink-soft);}
+  .lock-tag{margin-left:auto; font-size:11px; font-weight:600; color:var(--ink-soft);}
+  .vote-lock{display:none; margin:0 0 12px; padding:11px 13px; border:1px dashed var(--bronze); border-radius:8px; font-size:13px; line-height:1.5; color:var(--gold-pale); background:var(--panel-glow); cursor:pointer;}
+  .vote-lock.show{display:block;}
+  .vote-btn:disabled{cursor:not-allowed;}
 
   /* ---------- follow checkbox ---------- */
   .follow-check{display:flex; align-items:flex-start; gap:11px; padding:11px 12px; cursor:pointer;
@@ -706,7 +718,7 @@
   </header>
 
   <!-- STEP 1 & 2: SIGN IN + INSTAGRAM GATE -->
-  <a class="ig-cta" href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener">
+  <a class="ig-cta" data-ig-follow href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener">
     <span class="ig-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="igG" cx=".3" cy="1.05" r="1.25"><stop offset="0" stop-color="#FFD776"/><stop offset=".25" stop-color="#FA7E1E"/><stop offset=".5" stop-color="#D62976"/><stop offset=".75" stop-color="#962FBF"/><stop offset="1" stop-color="#4F5BD5"/></radialGradient></defs><rect width="48" height="48" rx="12" fill="url(#igG)"/><rect x="10" y="10" width="28" height="28" rx="8.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="24" cy="24" r="6.6" fill="none" stroke="#fff" stroke-width="3"/><circle cx="32.2" cy="15.8" r="2" fill="#fff"/></svg></span>
     <span class="ig-txt"><b>Follow @the_dibrugarh</b><small>Winners &amp; results announced only on Instagram</small></span>
   </a>
@@ -720,22 +732,14 @@
         </div>
       </div>
 
-      <div class="gate-step">
-        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Sign in with Google</div>
-        <div class="g-frame" id="gFrame"><div id="gSignInDiv"></div></div>
-        <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div>
-        <div class="signed-in-pill" id="signedInPill">
-          <span>✅</span> Signed in as <strong id="signedInName">—</strong>
-        </div>
-      </div>
-
-      <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
-      <div class="gate-step">
-        <div class="gate-label"><span class="gate-check" id="checkFollow">✓</span> Follow us on Instagram</div>
+      <div class="gate-step" id="stepFollow">
+        <div class="gate-label"><span class="gate-check" id="checkFollow">✓</span> Step 1 — Follow us on Instagram</div>
         <div class="ig-qr"><div id="igqr"></div><span>Follow <b>@the_dibrugarh</b><br>for results &amp; winners</span></div>
-        <label class="follow-check">
-          <input type="checkbox" id="followBox" />
-          <span>I have followed <a href="https://www.instagram.com/the_dibrugarh" target="_blank" rel="noopener">@the_dibrugarh</a> on Instagram</span>
+        <a class="ig-step-btn" id="igFollowBtn" data-ig-follow href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener">Open Instagram &amp; follow @the_dibrugarh</a>
+        <div class="gate-note" id="igStatus" role="status" aria-live="polite">Tap the button, follow the account, then come back here. Sign-in and voting stay locked until you do.</div>
+        <label class="follow-check is-disabled" id="followLabel">
+          <input type="checkbox" id="followBox" disabled />
+          <span>I have followed @the_dibrugarh on Instagram</span>
         </label>
         <div class="gate-note">
           Your vote counts <b>only if you follow @the_dibrugarh</b> on Instagram — votes from people who
@@ -743,6 +747,16 @@
           vote solely to help flag duplicate voting.
         </div>
       </div>
+      <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
+      <div class="gate-step gate-locked" id="stepGoogle">
+        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Step 2 — Sign in with Google <span class="lock-tag" id="googleLock">🔒 Locked until Step 1 is done</span></div>
+        <div class="g-frame" id="gFrame"><div class="g-placeholder" id="gPlaceholder">Complete Step 1 to unlock Google sign-in</div><div id="gSignInDiv"></div></div>
+        <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div>
+        <div class="signed-in-pill" id="signedInPill">
+          <span>✅</span> Signed in as <strong id="signedInName">—</strong>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -757,6 +771,7 @@
           <div class="sub">One vote per person — make it count</div>
         </div>
       </div>
+      <div class="vote-lock" id="voteLock" role="status"></div>
       <label class="pandal-search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
         <input type="search" id="pandalSearch" placeholder="Search pandal or area" autocomplete="off" spellcheck="false" aria-label="Search pandals" />
@@ -932,16 +947,169 @@ function parseJwt_(token){
   }catch(e){ return null; }
 }
 
+// ====== INSTAGRAM-FIRST GATE ======
+// Order is enforced: (1) tap Follow on Instagram -> wait -> confirm,
+// (2) only then Google sign-in is shown, (3) only then voting unlocks.
+// The server re-checks the order with a signed ticket (see Code.gs), so this
+// UI cannot be skipped by editing the page.
+const FOLLOW_MIN_SECONDS = 8;        // must wait at least this long after tapping Follow
+const FOLLOW_FALLBACK_SECONDS = 15;  // used if the browser never reports the visitor leaving the page
+const GATE_KEY = "dpc26_gate_v1";
+const GATE_MAX_AGE_MS = 4.5 * 3600 * 1000; // must stay below the server's 5h ticket lifetime
+let followTapAt = 0, followToken = "", followDone = false, leftPageSinceTap = false, followTimer = null;
+
+const $ = id => document.getElementById(id);
+function gateOpen(){ return followDone && !!idToken; }
+
+function saveGate_(){
+  try{ localStorage.setItem(GATE_KEY, JSON.stringify({ tapAt: followTapAt, token: followToken, done: followDone, left: leftPageSinceTap })); }catch(e){}
+}
+function loadGate_(){
+  try{
+    const g = JSON.parse(localStorage.getItem(GATE_KEY) || "null");
+    if(g && g.tapAt && g.token && Date.now() - g.tapAt < GATE_MAX_AGE_MS){
+      followTapAt = g.tapAt; followToken = g.token; followDone = !!g.done; leftPageSinceTap = !!g.left;
+    }
+  }catch(e){}
+}
+function clearGate_(){ try{ localStorage.removeItem(GATE_KEY); }catch(e){} }
+
+async function fetchFollowToken_(){
+  try{
+    const r = await fetch(SCRIPT_URL + "?followStart=1&t=" + Date.now());
+    const d = await r.json();
+    if(d && d.status === "success" && d.token){ followToken = d.token; saveGate_(); return true; }
+  }catch(e){}
+  return false;
+}
+
+function updateGate_(){
+  const lock = $("voteLock");
+  if(!followDone){
+    lock.textContent = "🔒 Voting is locked — first follow @the_dibrugarh on Instagram (Step 1), then sign in with Google (Step 2).";
+    lock.dataset.target = "stepFollow"; lock.classList.add("show");
+  } else if(!idToken){
+    lock.textContent = "🔒 Almost there — sign in with Google (Step 2) to unlock voting.";
+    lock.dataset.target = "stepGoogle"; lock.classList.add("show");
+  } else {
+    lock.classList.remove("show");
+  }
+  renderPandals();
+}
+$("voteLock").addEventListener("click", ev => {
+  const t = $(ev.currentTarget.dataset.target || "stepFollow");
+  if(t) t.scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+function startFollowCountdown_(){
+  clearInterval(followTimer);
+  const status = $("igStatus"), box = $("followBox"), label = $("followLabel");
+  const tick = () => {
+    if(followDone){ clearInterval(followTimer); return; }
+    const s = (Date.now() - followTapAt) / 1000;
+    const need = leftPageSinceTap ? FOLLOW_MIN_SECONDS : FOLLOW_FALLBACK_SECONDS;
+    if(s >= need){
+      box.disabled = false; label.classList.remove("is-disabled");
+      status.textContent = "Back from Instagram? Tick the box below to continue to Step 2.";
+      clearInterval(followTimer);
+    } else {
+      box.disabled = true; label.classList.add("is-disabled");
+      status.textContent = "Follow @the_dibrugarh on Instagram, then come back here… (" + Math.max(1, Math.ceil(need - s)) + "s)";
+    }
+  };
+  tick();
+  if(!followDone) followTimer = setInterval(tick, 500);
+}
+
+function onFollowTap(){
+  if(!followTapAt){
+    followTapAt = Date.now(); leftPageSinceTap = false;
+    fetchFollowToken_();
+    saveGate_();
+  }
+  $("igFollowBtn").classList.add("tapped");
+  startFollowCountdown_();
+}
+document.querySelectorAll("[data-ig-follow]").forEach(a => a.addEventListener("click", onFollowTap));
+// Leaving the page after the tap (to Instagram app / tab) counts as "went to follow".
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden && followTapAt && !followDone){ leftPageSinceTap = true; saveGate_(); }
+});
+
+function unlockGoogle_(){
+  $("stepGoogle").classList.remove("gate-locked");
+  $("stepGoogle").removeAttribute("aria-disabled");
+  $("googleLock").style.display = "none";
+  $("gPlaceholder").style.display = "none";
+  initGoogle(0);
+}
+
+function lockGoogle_(){
+  idToken = null;
+  $("stepGoogle").classList.add("gate-locked");
+  $("stepGoogle").setAttribute("aria-disabled", "true");
+  $("googleLock").style.display = "";
+  $("gPlaceholder").style.display = "";
+  $("gSignInDiv").innerHTML = "";
+  $("gFrame").style.display = "";
+  $("signedInPill").classList.remove("show");
+  $("checkGoogle").classList.remove("done");
+}
+
+function resetGate_(){
+  clearInterval(followTimer);
+  followTapAt = 0; followToken = ""; followDone = false; leftPageSinceTap = false;
+  clearGate_();
+  const box = $("followBox");
+  box.checked = false; box.disabled = true;
+  $("followLabel").classList.add("is-disabled");
+  $("checkFollow").classList.remove("done");
+  $("igFollowBtn").classList.remove("tapped");
+  $("igStatus").textContent = "Tap the button, follow the account, then come back here. Sign-in and voting stay locked until you do.";
+  lockGoogle_();
+  updateGate_();
+}
+
+function markFollowDoneUi_(){
+  const box = $("followBox");
+  box.checked = true; box.disabled = true;
+  $("followLabel").classList.add("is-disabled");
+  $("checkFollow").classList.add("done");
+  $("igFollowBtn").classList.add("tapped");
+  $("igStatus").textContent = "Instagram step done ✓";
+}
+
+$("followBox").addEventListener("change", async () => {
+  const box = $("followBox");
+  if(!box.checked || followDone) return;
+  if(!followTapAt){ box.checked = false; showToast("Please tap the Instagram button first."); return; }
+  if(!followToken && !(await fetchFollowToken_())){
+    box.checked = false; showToast("Couldn't reach the server — please try again."); return;
+  }
+  followDone = true; saveGate_();
+  markFollowDoneUi_();
+  unlockGoogle_();
+  updateGate_();
+});
+
 function handleCredentialResponse(response){
+  // Defence in depth: never accept a sign-in before Step 1 is complete.
+  if(!followDone){
+    idToken = null;
+    showToast("Please complete Step 1 (follow on Instagram) first.");
+    return;
+  }
   idToken = response.credential;
   const payload = parseJwt_(idToken);
   document.getElementById("checkGoogle").classList.add("done");
   document.getElementById("signedInPill").classList.add("show");
   document.getElementById("signedInName").textContent = (payload && (payload.name || payload.email)) || "your Google account";
   document.getElementById("gFrame").style.display = "none";
+  updateGate_();
 }
 
 function initGoogle(tries){
+  if(!followDone) return; // Google sign-in is never rendered before Step 1 is complete
   if(window.google && google.accounts && google.accounts.id){
     google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
     const w = Math.max(200, Math.min(400, document.getElementById("gFrame").clientWidth - 4));
@@ -951,7 +1119,19 @@ function initGoogle(tries){
     setTimeout(() => initGoogle(tries + 1), 300);
   }
 }
-window.addEventListener("load", () => initGoogle(0));
+
+function initGate_(){
+  loadGate_();
+  if(followDone){
+    markFollowDoneUi_();
+    unlockGoogle_();
+  } else if(followTapAt){
+    $("igFollowBtn").classList.add("tapped");
+    startFollowCountdown_();
+  }
+  updateGate_();
+}
+window.addEventListener("load", initGate_);
 
 function crownFor(i){
   if(i === 0) return '<svg class="medal icon" viewBox="0 0 24 24" style="stroke:#E8C468"><use href="#i-laurel"/></svg>';
@@ -974,14 +1154,14 @@ function renderPandals(){
     gridEl.innerHTML = `<div class="pandal-empty">${pandals.length ? "No pandal matches your search." : "Pandals will be listed here shortly — please check back soon."}</div>`;
     return;
   }
-  const locked = busyId !== null || selectedVoted;
+  const locked = busyId !== null || selectedVoted || !gateOpen();
   gridEl.innerHTML = list.map(p => {
     const isVoted = votedId !== null && String(p.id) === String(votedId);
     const isBusy = busyId !== null && String(p.id) === String(busyId);
     return `<div class="pandal-card">
       <div class="pandal-thumb"><svg class="durga-badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-durga"/></svg>${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}</div>
       <div class="pandal-info"><div class="pandal-name">${esc(p.name)}</div><div class="pandal-area">${esc(p.area)}</div></div>
-      <button class="vote-btn${isVoted ? " voted" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : "Vote"}</button>
+      <button class="vote-btn${isVoted ? " voted" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : (!gateOpen() ? "🔒 Locked" : "Vote")}</button>
     </div>`;
   }).join("");
 }
@@ -1002,8 +1182,6 @@ async function loadPandals(){
   }
 }
 
-const followBox = document.getElementById("followBox");
-followBox.addEventListener("change", () => document.getElementById("checkFollow").classList.toggle("done", followBox.checked));
 
 const modal = document.getElementById("rulesModal");
 let pendingVote = null;
@@ -1033,14 +1211,14 @@ document.addEventListener("keydown", ev => {
 // Pressing Vote checks the three steps first, then shows the rules pop-up.
 function onVoteClick(btn){
   if(selectedVoted || busyId !== null) return;
-  if(!idToken){
-    showToast("Please sign in with Google first.");
-    document.getElementById("gFrame").scrollIntoView({behavior:"smooth", block:"center"});
+  if(!followDone){
+    showToast("Please follow @the_dibrugarh on Instagram first (Step 1).");
+    $("stepFollow").scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
-  if(!followBox.checked){
-    showToast("Please follow @the_dibrugarh and tick the box first.");
-    followBox.scrollIntoView({behavior:"smooth", block:"center"});
+  if(!idToken){
+    showToast("Please sign in with Google (Step 2) first.");
+    $("stepGoogle").scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
   openRules({ id: btn.dataset.id, name: btn.dataset.name });
@@ -1064,13 +1242,14 @@ function burst(){
 }
 
 async function submitVote(p){
+  if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
   busyId = p.id; renderPandals();
   try{
     const deviceFingerprint = await computeDeviceFingerprint_();
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({ idToken: idToken, pandalId: p.id, pandalName: p.name,
-        deviceFingerprint: deviceFingerprint, followConfirmed: true, rulesAccepted: true })
+        deviceFingerprint: deviceFingerprint, followToken: followToken, followConfirmed: true, rulesAccepted: true })
     });
     const data = await res.json();
     busyId = null;
@@ -1086,7 +1265,8 @@ async function submitVote(p){
       selectedVoted = true; renderPandals();
       showToast(data.message || "This Google account has already voted.");
     } else {
-      renderPandals();
+      if(data.code === "follow_required"){ resetGate_(); }
+      else { renderPandals(); }
       showToast(data.message || "Something went wrong — please try again.");
     }
   }catch(e){

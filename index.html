@@ -453,8 +453,10 @@
   .g-frame #gSignInDiv{background:#131314; border-radius:7px; overflow:hidden; min-height:44px; color-scheme:dark;}
   .g-note{text-align:center; margin-top:9px;}
   /* Instagram-first gate */
-  .ig-step-btn{display:block; text-align:center; padding:13px 14px; margin:10px 0 8px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; text-decoration:none;
+  .ig-step-btn{display:flex; align-items:center; justify-content:center; gap:10px; text-align:center; padding:13px 14px; margin:10px 0 8px; border-radius:12px; font-weight:700; font-size:15px; color:#fff; text-decoration:none;
     background:linear-gradient(135deg,#B10F1E,#E8642A 55%,#E8A33D); border:1px solid rgba(255,246,234,.55); box-shadow:0 4px 12px rgba(20,0,4,.35);}
+  .ig-step-btn .ig-btn-txt{text-align:left; line-height:1.3;}
+  .ig-step-btn svg{width:22px; height:22px; flex:none; display:block;}
   .ig-step-btn.tapped{background:var(--panel-glow); color:var(--gold-light); border-color:var(--bronze); box-shadow:none;}
   .follow-check.is-disabled{opacity:.45; cursor:not-allowed;}
   .follow-check.is-disabled input{cursor:not-allowed;}
@@ -464,6 +466,12 @@
   .vote-lock{display:none; margin:0 0 12px; padding:11px 13px; border:1px dashed var(--bronze); border-radius:8px; font-size:13px; line-height:1.5; color:var(--gold-pale); background:var(--panel-glow); cursor:pointer;}
   .vote-lock.show{display:block;}
   .vote-btn:disabled{cursor:not-allowed;}
+  .vote-btn.dim{opacity:.55;}
+  .dup-banner{display:none; margin:0 0 12px; padding:15px 14px; border-radius:10px; text-align:center; font-weight:800; font-size:16px; line-height:1.45; color:#fff;
+    background:linear-gradient(135deg,#8E1020,#C0392B); border:1px solid rgba(255,246,234,.55); box-shadow:0 4px 14px rgba(20,0,4,.35);}
+  .dup-banner small{display:block; margin-top:3px; font-size:12.5px; font-weight:500; opacity:.95;}
+  .dup-banner.show{display:block;}
+  .dup-icon{font-size:56px; line-height:1; text-align:center; margin-bottom:6px;}
 
   /* ---------- follow checkbox ---------- */
   .follow-check{display:flex; align-items:flex-start; gap:11px; padding:11px 12px; cursor:pointer;
@@ -731,7 +739,7 @@
       <div class="gate-step" id="stepFollow">
         <div class="gate-label"><span class="gate-check" id="checkFollow">✓</span> Step 1 — Follow us on Instagram</div>
         <div class="ig-qr"><div id="igqr"></div><span>Follow <b>@the_dibrugarh</b><br>for results &amp; winners</span></div>
-        <a class="ig-step-btn" id="igFollowBtn" data-ig-follow href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener">Open Instagram &amp; follow @the_dibrugarh</a>
+        <a class="ig-step-btn" id="igFollowBtn" data-ig-follow href="https://www.instagram.com/the_dibrugarh/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-btn-txt">Open Instagram &amp; follow<br>@the_dibrugarh</span></a>
         <div class="gate-note" id="igStatus" role="status" aria-live="polite">Tap the button, follow the account, then come back here. Sign-in and voting stay locked until you do.</div>
         <label class="follow-check is-disabled" id="followLabel">
           <input type="checkbox" id="followBox" disabled />
@@ -767,6 +775,7 @@
           <div class="sub">One vote per person — make it count</div>
         </div>
       </div>
+      <div class="dup-banner" id="dupBanner" role="alert"></div>
       <div class="vote-lock" id="voteLock" role="status"></div>
       <label class="pandal-search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
@@ -879,6 +888,25 @@
   </div>
 </div>
 
+<div class="modal" id="dupModal" hidden role="alertdialog" aria-modal="true" aria-labelledby="dupTitle" aria-describedby="dupMsg">
+  <div class="modal-backdrop"></div>
+  <div class="modal-card" tabindex="-1">
+    <div class="dup-icon" aria-hidden="true">🚫</div>
+    <h2 id="dupTitle">You have already voted!</h2>
+    <div class="warn-loud" role="alert">
+      <div class="warn-title">⛔ Second vote not counted</div>
+      <div class="warn-body" id="dupMsg">This Google account has already voted.</div>
+    </div>
+    <ul class="rules-list">
+      <li><b>One vote per person.</b> Your first vote is safe and has been counted.</li>
+      <li>A vote can't be changed or repeated, and duplicate attempts are deleted.</li>
+    </ul>
+    <div class="modal-actions">
+      <button type="button" class="vote-btn modal-go" id="dupOk">OK, got it</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -890,6 +918,7 @@ const GOOGLE_CLIENT_ID = "225466365069-19p02tbr3h2mkfiu3d9rjc18bdm4k86l.apps.goo
 let pandals = [];
 let idToken = null;
 let selectedVoted = false;
+let votedName = "";
 
 // ---- Lightweight device signal (NOT identity, NOT IMEI — a browser has no
 // access to that). This hashes a few stable, non-personal signals the
@@ -1088,6 +1117,39 @@ $("followBox").addEventListener("change", async () => {
   updateGate_();
 });
 
+// ---- Already-voted handling ------------------------------------------------
+// The server is the real authority (one vote per Google account). This only adds
+// a big, clear message, and remembers accounts that voted in this browser so a
+// repeat attempt is explained immediately. Other accounts on the same device
+// are NOT blocked by this.
+const VOTED_KEY = "dpc26_voted_emails_v1";
+function votedEmails_(){ try{ return JSON.parse(localStorage.getItem(VOTED_KEY) || "[]"); }catch(e){ return []; } }
+function rememberVoted_(email){
+  if(!email) return;
+  try{ const l = votedEmails_(); if(!l.includes(email)){ l.push(email); localStorage.setItem(VOTED_KEY, JSON.stringify(l)); } }catch(e){}
+}
+function currentEmail_(){
+  const p = idToken ? parseJwt_(idToken) : null;
+  return p && p.email ? String(p.email).trim().toLowerCase() : "";
+}
+const dupModal = $("dupModal");
+function showDup_(msg){
+  selectedVoted = true;
+  const text = msg || (votedName ? "You have already voted for " + votedName + "." : "This Google account has already voted.");
+  $("dupMsg").textContent = text;
+  const b = $("dupBanner");
+  b.innerHTML = "✅ You have already voted — one vote per person.<small>Your first vote is counted. Further votes are not allowed.</small>";
+  b.classList.add("show");
+  renderPandals();
+  dupModal.hidden = false;
+  document.body.style.overflow = "hidden";
+  $("dupOk").focus();
+}
+function closeDup_(){ dupModal.hidden = true; document.body.style.overflow = ""; }
+$("dupOk").addEventListener("click", closeDup_);
+dupModal.querySelector(".modal-backdrop").addEventListener("click", closeDup_);
+document.addEventListener("keydown", ev => { if(!dupModal.hidden && ev.key === "Escape") closeDup_(); });
+
 function handleCredentialResponse(response){
   // Defence in depth: never accept a sign-in before Step 1 is complete.
   if(!followDone){
@@ -1102,6 +1164,7 @@ function handleCredentialResponse(response){
   document.getElementById("signedInName").textContent = (payload && (payload.name || payload.email)) || "your Google account";
   document.getElementById("gFrame").style.display = "none";
   updateGate_();
+  if(votedEmails_().includes(currentEmail_())) showDup_("This Google account has already voted from this device.");
 }
 
 function initGoogle(tries){
@@ -1150,14 +1213,14 @@ function renderPandals(){
     gridEl.innerHTML = `<div class="pandal-empty">${pandals.length ? "No pandal matches your search." : "Pandals will be listed here shortly — please check back soon."}</div>`;
     return;
   }
-  const locked = busyId !== null || selectedVoted || !gateOpen();
+  const locked = busyId !== null || !gateOpen();
   gridEl.innerHTML = list.map(p => {
     const isVoted = votedId !== null && String(p.id) === String(votedId);
     const isBusy = busyId !== null && String(p.id) === String(busyId);
     return `<div class="pandal-card">
       <div class="pandal-thumb"><svg class="durga-badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-durga"/></svg>${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}</div>
       <div class="pandal-info"><div class="pandal-name">${esc(p.name)}</div><div class="pandal-area">${esc(p.area)}</div></div>
-      <button class="vote-btn${isVoted ? " voted" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : (!gateOpen() ? "🔒 Locked" : "Vote")}</button>
+      <button class="vote-btn${isVoted ? " voted" : ""}${selectedVoted && !isVoted ? " dim" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : (!gateOpen() ? "🔒 Locked" : "Vote")}</button>
     </div>`;
   }).join("");
 }
@@ -1206,7 +1269,8 @@ document.addEventListener("keydown", ev => {
 
 // Pressing Vote checks the three steps first, then shows the rules pop-up.
 function onVoteClick(btn){
-  if(selectedVoted || busyId !== null) return;
+  if(busyId !== null) return;
+  if(selectedVoted){ showDup_(); return; }
   if(!followDone){
     showToast("Please follow @the_dibrugarh on Instagram first (Step 1).");
     $("stepFollow").scrollIntoView({behavior:"smooth", block:"center"});
@@ -1250,7 +1314,7 @@ async function submitVote(p){
     const data = await res.json();
     busyId = null;
     if(data.status === "success"){
-      selectedVoted = true; votedId = p.id; renderPandals();
+      selectedVoted = true; votedId = p.id; votedName = p.name; rememberVoted_(currentEmail_()); renderPandals();
       document.getElementById("votedFor").textContent = p.name;
       const ty = document.getElementById("thankyouCard");
       ty.classList.add("show");
@@ -1258,8 +1322,8 @@ async function submitVote(p){
       burst();
       loadResults();
     } else if(data.status === "duplicate"){
-      selectedVoted = true; renderPandals();
-      showToast(data.message || "This Google account has already voted.");
+      rememberVoted_(currentEmail_());
+      showDup_(data.message || "This Google account has already voted.");
     } else {
       if(data.code === "follow_required"){ resetGate_(); }
       else { renderPandals(); }

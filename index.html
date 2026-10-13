@@ -594,6 +594,8 @@
   .pandal-thumb .durga-badge{position:absolute; inset:0; width:100%; height:100%; filter:drop-shadow(0 3px 6px rgba(0,0,0,.5));}
   .pandal-thumb img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; border:2px solid var(--gold);}
   .pandal-name{white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-height:1.3;}
+  .or-sep{text-align:center; font-size:12px; color:var(--ink-soft); margin:14px 0 8px; letter-spacing:1px;}
+  .gate-locked #phoneBlock{opacity:.45;}
 </style>
 </head>
 <body>
@@ -747,15 +749,19 @@
         </label>
         <div class="gate-note">
           Your vote counts <b>only if you follow @the_dibrugarh</b> on Instagram — votes from people who
-          don't follow will be removed. We also record basic, non-personal device information with your
-          vote solely to help flag duplicate voting.
+          don't follow will be removed. We also record your location, IP address and basic device information with your vote solely to help flag duplicate voting.
         </div>
       </div>
       <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
       <div class="gate-step gate-locked" id="stepGoogle">
-        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Step 2 — Sign in with Google <span class="lock-tag" id="googleLock">🔒 Locked until Step 1 is done</span></div>
+        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Step 2 — Sign in with Google or phone <span class="lock-tag" id="googleLock">🔒 Locked until Step 1 is done</span></div>
         <div class="g-frame" id="gFrame"><div class="g-placeholder" id="gPlaceholder">Complete Step 1 to unlock Google sign-in</div><div id="gSignInDiv"></div></div>
         <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div>
+        <div id="phoneBlock">
+          <div class="or-sep">— OR —</div>
+          <div class="ig-input-row"><span class="at">+91</span><input type="tel" id="phoneInput" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" autocomplete="tel-national" disabled /></div>
+          <button type="button" class="vote-btn modal-go" id="phoneBtn" style="margin-top:10px" disabled>Continue with phone</button>
+        </div>
         <div class="signed-in-pill" id="signedInPill">
           <span>✅</span> Signed in as <strong id="signedInName">—</strong>
         </div>
@@ -879,7 +885,7 @@
       <li><b>One vote per person.</b> Duplicate votes — same Google account or device — will be deleted.</li>
       <li><b>Fake votes will be removed,</b> including votes from people who don't follow @the_dibrugarh.</li>
       <li>Once submitted, your vote can't be changed.</li>
-      <li>To catch fake and duplicate votes, we store your verified Google login email and a device fingerprint with your vote. We never see your Google password.</li>
+      <li>To catch fake and duplicate votes, we store your Google email or phone number, your location, IP address and a device fingerprint with your vote. We never see your Google password.</li>
     </ul>
     <div class="modal-actions">
       <button type="button" class="vote-btn modal-go" id="rulesConfirm">I understand, Submit vote</button>
@@ -917,6 +923,7 @@ const GOOGLE_CLIENT_ID = "225466365069-19p02tbr3h2mkfiu3d9rjc18bdm4k86l.apps.goo
 
 let pandals = [];
 let idToken = null;
+let phoneNumber = "";
 let selectedVoted = false;
 let votedName = "";
 
@@ -984,7 +991,7 @@ const GATE_MAX_AGE_MS = 4.5 * 3600 * 1000; // must stay below the server's 5h ti
 let followTapAt = 0, followToken = "", followDone = false, leftPageSinceTap = false, followTimer = null;
 
 const $ = id => document.getElementById(id);
-function gateOpen(){ return followDone && !!idToken; }
+function gateOpen(){ return followDone && (!!idToken || !!phoneNumber); }
 
 function saveGate_(){
   try{ localStorage.setItem(GATE_KEY, JSON.stringify({ tapAt: followTapAt, token: followToken, done: followDone, left: leftPageSinceTap })); }catch(e){}
@@ -1013,8 +1020,8 @@ function updateGate_(){
   if(!followDone){
     lock.textContent = "🔒 Voting is locked — first follow @the_dibrugarh on Instagram (Step 1), then sign in with Google (Step 2).";
     lock.dataset.target = "stepFollow"; lock.classList.add("show");
-  } else if(!idToken){
-    lock.textContent = "🔒 Almost there — sign in with Google (Step 2) to unlock voting.";
+  } else if(!idToken && !phoneNumber){
+    lock.textContent = "🔒 Almost there — sign in with Google or enter your phone number (Step 2) to unlock voting.";
     lock.dataset.target = "stepGoogle"; lock.classList.add("show");
   } else {
     lock.classList.remove("show");
@@ -1067,6 +1074,7 @@ function unlockGoogle_(){
   $("googleLock").style.display = "none";
   $("gPlaceholder").style.display = "none";
   initGoogle(0);
+  $("phoneInput").disabled = false; $("phoneBtn").disabled = false;
 }
 
 function lockGoogle_(){
@@ -1079,6 +1087,9 @@ function lockGoogle_(){
   $("gFrame").style.display = "";
   $("signedInPill").classList.remove("show");
   $("checkGoogle").classList.remove("done");
+  phoneNumber = "";
+  $("phoneInput").value = ""; $("phoneInput").disabled = true; $("phoneBtn").disabled = true;
+  $("phoneBlock").style.display = "";
 }
 
 function resetGate_(){
@@ -1129,6 +1140,7 @@ function rememberVoted_(email){
   try{ const l = votedEmails_(); if(!l.includes(email)){ l.push(email); localStorage.setItem(VOTED_KEY, JSON.stringify(l)); } }catch(e){}
 }
 function currentEmail_(){
+  if(phoneNumber) return phoneNumber.toLowerCase();
   const p = idToken ? parseJwt_(idToken) : null;
   return p && p.email ? String(p.email).trim().toLowerCase() : "";
 }
@@ -1158,6 +1170,7 @@ function handleCredentialResponse(response){
     return;
   }
   idToken = response.credential;
+  phoneNumber = ""; $("phoneBlock").style.display = "none";
   const payload = parseJwt_(idToken);
   document.getElementById("checkGoogle").classList.add("done");
   document.getElementById("signedInPill").classList.add("show");
@@ -1165,6 +1178,43 @@ function handleCredentialResponse(response){
   document.getElementById("gFrame").style.display = "none";
   updateGate_();
   if(votedEmails_().includes(currentEmail_())) showDup_("This Google account has already voted from this device.");
+}
+
+// ---- Phone sign-in (typed number, not OTP-verified) ----
+$("phoneBtn").addEventListener("click", usePhone_);
+$("phoneInput").addEventListener("keydown", e => { if(e.key === "Enter") usePhone_(); });
+function usePhone_(){
+  if(!followDone){ showToast("Please complete Step 1 (follow on Instagram) first."); return; }
+  let n = $("phoneInput").value.replace(/\D/g, "");
+  if(n.length === 12 && n.indexOf("91") === 0) n = n.slice(2);
+  if(!/^[6-9]\d{9}$/.test(n)){ showToast("Enter a valid 10-digit mobile number."); return; }
+  phoneNumber = "+91" + n; idToken = null;
+  $("checkGoogle").classList.add("done");
+  $("signedInPill").classList.add("show");
+  $("signedInName").textContent = phoneNumber;
+  $("gFrame").style.display = "none";
+  $("phoneBlock").style.display = "none";
+  updateGate_();
+  if(votedEmails_().includes(currentEmail_())) showDup_("This phone number has already voted from this device.");
+}
+
+// ---- GPS (required) ----
+function getGps_(){
+  return new Promise((resolve, reject) => {
+    if(!navigator.geolocation){ reject(new Error("unsupported")); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ lat: pos.coords.latitude.toFixed(5), lng: pos.coords.longitude.toFixed(5), accuracy: Math.round(pos.coords.accuracy) }),
+      err => reject(err),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  });
+}
+function getDeviceInfo_(){
+  return { userAgent: navigator.userAgent, screen: screen.width + "x" + screen.height,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, language: navigator.language, platform: navigator.platform };
+}
+function getIP_(){
+  return fetch("https://api.ipify.org?format=json").then(r => r.json()).then(d => d.ip).catch(() => "");
 }
 
 function initGoogle(tries){
@@ -1276,8 +1326,8 @@ function onVoteClick(btn){
     $("stepFollow").scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
-  if(!idToken){
-    showToast("Please sign in with Google (Step 2) first.");
+  if(!idToken && !phoneNumber){
+    showToast("Please sign in with Google or enter your phone number (Step 2) first.");
     $("stepGoogle").scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
@@ -1303,12 +1353,16 @@ function burst(){
 
 async function submitVote(p){
   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
+  let gps;
+  try{ gps = await getGps_(); }
+  catch(e){ showToast("Location is required to vote. Please allow location access in your browser and try again.", 5200); return; }
   busyId = p.id; renderPandals();
   try{
-    const deviceFingerprint = await computeDeviceFingerprint_();
+    const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ idToken: idToken, pandalId: p.id, pandalName: p.name,
+      body: JSON.stringify({ idToken: idToken || "", phone: phoneNumber || "", pandalId: p.id, pandalName: p.name,
+        gps: gps, ip: ip, device: getDeviceInfo_(),
         deviceFingerprint: deviceFingerprint, followToken: followToken, followConfirmed: true, rulesAccepted: true })
     });
     const data = await res.json();

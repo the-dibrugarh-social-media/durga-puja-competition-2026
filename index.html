@@ -596,9 +596,209 @@
   .pandal-name{white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-height:1.3;}
   .or-sep{text-align:center; font-size:12px; color:var(--ink-soft); margin:14px 0 8px; letter-spacing:1px;}
   .gate-locked #phoneBlock{opacity:.45;}
+
+  /* ================= ROYAL CURTAINS (satin folds, gold rope tie-backs) ================= */
+  .cz{position:fixed;inset:0;z-index:1000;overflow:hidden;pointer-events:auto;--gs:.5;--ts:1;--fold:linear-gradient(90deg,#4a060d 0%,#8c111b 3%,#c72a2c 7%,#e44c3f 9%,#b1202a 13%,#650a13 17%,#9a141f 21%,#d23a35 25%,#ec5846 27%,#bc2429 31%,#5a0810 36%,#8a101a 40%,#c42b2d 44%,#df4c3e 47%,#a71c25 52%,#580810 57%,#94141e 61%,#cf3534 66%,#e85445 69%,#b3212b 74%,#620a12 79%,#90131d 83%,#c72d2e 88%,#dd4739 91%,#9d1a22 96%,#4a060d 100%);--foldR:linear-gradient(270deg,#4a060d 0%,#8c111b 3%,#c72a2c 7%,#e44c3f 9%,#b1202a 13%,#650a13 17%,#9a141f 21%,#d23a35 25%,#ec5846 27%,#bc2429 31%,#5a0810 36%,#8a101a 40%,#c42b2d 44%,#df4c3e 47%,#a71c25 52%,#580810 57%,#94141e 61%,#cf3534 66%,#e85445 69%,#b3212b 74%,#620a12 79%,#90131d 83%,#c72d2e 88%,#dd4739 91%,#9d1a22 96%,#4a060d 100%);}
+  .cz.is-reveal{pointer-events:none;}
+  .cz-back{position:absolute;inset:0;z-index:0;opacity:1;transition:opacity 1.4s ease;
+    background:
+      radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 30%,rgba(20,0,4,.7) 100%),
+      url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='150'%20height='150'%3E%0A%3Crect%20width='150'%20height='150'%20fill='%237a0c18'/%3E%0A%3Cg%20fill='none'%20stroke='%23C9A24A'%20stroke-width='1.5'%20opacity='.8'%3E%0A%3Ccircle%20cx='75'%20cy='75'%20r='46'/%3E%3Ccircle%20cx='0'%20cy='0'%20r='22'/%3E%3Ccircle%20cx='150'%20cy='0'%20r='22'/%3E%3Ccircle%20cx='0'%20cy='150'%20r='22'/%3E%3Ccircle%20cx='150'%20cy='150'%20r='22'/%3E%0A%3Cpath%20d='M75%2029C100%2029%20121%2050%20121%2075'/%3E%3Cpath%20d='M75%20121C50%20121%2029%20100%2029%2075'/%3E%0A%3C/g%3E%0A%3Cg%20fill='%23C9A24A'%20fill-opacity='.55'%20stroke='%23C9A24A'%20stroke-width='1'%3E%0A%3Cpath%20d='M75%2054C66%2064%2066%2082%2075%2092C84%2082%2084%2064%2075%2054Z'/%3E%0A%3Cpath%20d='M75%2092C60%2088%2053%2074%2056%2063C66%2067%2072%2078%2075%2092Z'/%3E%3Cpath%20d='M75%2092C90%2088%2097%2074%2094%2063C84%2067%2078%2078%2075%2092Z'/%3E%0A%3Cpath%20d='M75%2030l4%206-4%206-4-6z'/%3E%3Cpath%20d='M75%20120l4%206-4%206-4-6z'/%3E%3Cpath%20d='M30%2075l6%204-6%204-6-4z'%20transform='translate%28-3%20-4%29'/%3E%3Cpath%20d='M120%2075l6%204-6%204-6-4z'%20transform='translate%280%20-4%29'/%3E%0A%3C/g%3E%3C/svg%3E"),#7a0c18;}
+  .cz.is-reveal .cz-back{opacity:0;}
+  .cz-side{position:absolute;top:0;bottom:0;width:50.4%;z-index:1;transition:transform 1.5s cubic-bezier(.6,0,.3,1);}
+  .cz-side-l{left:0;} .cz-side-r{right:0;}
+  .cz.is-leave .cz-side-l{transform:translateX(-104%);} .cz.is-leave .cz-side-r{transform:translateX(104%);}
+  .cz-panel{position:absolute;inset:0;transition:transform 3.2s cubic-bezier(.55,0,.2,1);will-change:transform;
+    filter:drop-shadow(14px 0 16px rgba(0,0,0,.55));}
+  .cz-side-l .cz-panel{transform-origin:left center;}
+  .cz-side-r .cz-panel{transform-origin:right center;filter:drop-shadow(-14px 0 16px rgba(0,0,0,.55));}
+  .cz.is-open .cz-panel{transform:scaleX(var(--gs));}
+  .cz-fabric{position:absolute;inset:0;transition:clip-path 3.2s cubic-bezier(.55,0,.2,1);
+    clip-path:polygon(0 0,100% 0,100% 12%,100% 24%,100% 36%,100% 48%,100% 60%,100% 72%,100% 84%,100% 100%,0 100%);
+    background:var(--fold);}
+  .cz-side-r .cz-fabric{background:var(--foldR);
+    clip-path:polygon(100% 0,0 0,0 12%,0 24%,0 36%,0 48%,0 60%,0 72%,0 84%,0 100%,100% 100%);}
+  .cz.is-open .cz-side-l .cz-fabric{clip-path:polygon(0 0,100% 0,92% 12%,78% 24%,62% 36%,50% 48%,48% 60%,64% 72%,86% 84%,100% 100%,0 100%);}
+  .cz.is-open .cz-side-r .cz-fabric{clip-path:polygon(100% 0,0 0,8% 12%,22% 24%,38% 36%,50% 48%,52% 60%,36% 72%,14% 84%,0 100%,100% 100%);}
+  .cz-fabric::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 76%,rgba(0,0,0,.5) 100%);}
+  .cz-fabric::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;
+    background:linear-gradient(180deg,#F7E8B2,#C9A24A 55%,#8a6a1e);box-shadow:0 -2px 6px rgba(0,0,0,.4);}
+  .cz-side-l .cz-fabric{box-shadow:inset -16px 0 24px rgba(0,0,0,.35);} 
+  .cz-rod{position:absolute;left:0;right:0;top:0;height:12px;z-index:4;
+    background:linear-gradient(180deg,#FFF0B8,#D9B863 40%,#8a6a1e);box-shadow:0 4px 10px rgba(0,0,0,.6);
+    transition:opacity .8s ease .6s,transform .8s ease .6s;}
+  .cz.is-open .cz-rod{opacity:0;transform:translateY(-100%);}
+
+  /* tie-back ropes + tassels (drawn by script), shown once the curtains are gathered */
+  .cz-tie{position:absolute;top:calc(54% - 14px);width:150px;height:260px;z-index:3;pointer-events:none;
+    transform:scale(var(--ts));opacity:0;transition:opacity .9s ease 2.7s;
+    filter:drop-shadow(2px 5px 4px rgba(0,0,0,.5));}
+  .cz-side-l .cz-tie{left:0;transform-origin:0 0;}
+  .cz-side-r .cz-tie{right:0;transform-origin:100% 0;}
+  .cz-side-r .cz-tie svg{transform:scaleX(-1);}
+  .cz.is-open .cz-tie{opacity:1;}
+  .cz-tie svg,.cz-seam svg{display:block;width:100%;height:100%;overflow:visible;}
+
+  .cz-intro{position:absolute;left:0;right:0;bottom:calc(50% + 84px);z-index:5;display:flex;flex-direction:column;align-items:center;
+    gap:10px;text-align:center;padding:0 20px;transition:opacity .9s ease,transform .9s ease;}
+  .cz.is-open .cz-intro{opacity:0;transform:scale(1.05);transition-delay:1.7s;}
+  .cz-logo{width:clamp(96px,28vw,140px);height:clamp(96px,28vw,140px);border-radius:50%;object-fit:cover;background:#FFF8EC;
+    border:4px solid #E2B04A;box-shadow:0 0 0 6px rgba(226,176,74,.22),0 0 38px rgba(226,176,74,.35),0 16px 34px -10px rgba(0,0,0,.8);}
+  .cz-title,.cz-sub{margin:0;color:transparent;-webkit-background-clip:text;background-clip:text;background-size:260% 100%;
+    animation:czShine 3.2s linear infinite;}
+  .cz-title{font-family:'Cinzel',serif;font-weight:900;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;
+    font-size:clamp(13px,3.8vw,19px);
+    background-image:linear-gradient(100deg,#FFE9C7 0%,#FFE9C7 38%,#FFFFFF 48%,#FFD76A 54%,#FFE9C7 64%,#FFE9C7 100%);
+    filter:drop-shadow(0 0 6px rgba(255,214,120,.55)) drop-shadow(0 2px 6px rgba(0,0,0,.7));}
+  .cz-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,4vw,18px);animation-delay:-1.4s;
+    background-image:linear-gradient(100deg,#F5CF7A 0%,#F5CF7A 38%,#FFFFFF 48%,#FFE9A8 54%,#F5CF7A 64%,#F5CF7A 100%);
+    filter:drop-shadow(0 0 5px rgba(255,214,120,.5));}
+  @keyframes czShine{0%{background-position:130% 0}100%{background-position:-130% 0}}
+  .cz-spark{position:absolute;inset:-14px -6px;pointer-events:none;}
+  .cz-star{position:absolute;display:block;pointer-events:none;
+    background:radial-gradient(circle,#fff 0,#FFE9A8 35%,#E2B04A 75%);
+    clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+    filter:drop-shadow(0 0 4px rgba(255,225,140,.95));opacity:0;
+    animation:czTwinkle var(--d,2.2s) ease-in-out var(--dl,0s) infinite;}
+  @keyframes czTwinkle{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+  .cz-burst{position:absolute;display:block;pointer-events:none;
+    background:radial-gradient(circle,#fff 0,#FFE9A8 40%,#E2B04A 80%);
+    clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+    filter:drop-shadow(0 0 5px rgba(255,225,140,1));opacity:0;
+    animation:czBurst 1.7s cubic-bezier(.2,.7,.3,1) var(--dl,0s) forwards;}
+  @keyframes czBurst{0%{opacity:0;transform:translate(0,0) scale(.2)}18%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.2) rotate(120deg)}}
+
+  .cz-seam{position:absolute;left:50%;top:50%;width:200px;height:240px;margin:-30px 0 0 -100px;z-index:4;pointer-events:none;
+    filter:drop-shadow(2px 5px 4px rgba(0,0,0,.5));transition:transform .9s cubic-bezier(.5,0,.9,.4),opacity .8s ease .1s;}
+  .cz.is-broken .cz-seam{transform:translateY(150px) rotate(6deg);opacity:0;}
+  .cz-hint{position:absolute;left:0;right:0;top:calc(50% + 214px);z-index:5;text-align:center;margin:0;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:rgba(245,207,122,.9);
+    transition:opacity .5s ease,transform .6s ease;text-shadow:0 2px 8px rgba(0,0,0,.8);}
+  .cz.is-broken .cz-hint{opacity:0;transform:translateY(-10px);}
+  .cz-center{position:absolute;inset:0;z-index:5;pointer-events:none;}
+  .cz-center > *{pointer-events:auto;}
+
+  /* realistic wax seal (unchanged look) */
+  .cz-seal{position:absolute;left:50%;top:50%;width:128px;height:128px;margin:-64px 0 0 -64px;z-index:6;padding:0;border:0;
+    background:none;cursor:pointer;animation:czBreath 3.2s ease-in-out infinite;-webkit-tap-highlight-color:transparent;}
+  .cz-seal:focus{outline:none;} .cz-seal:focus-visible{outline:3px solid #FFE9A8;outline-offset:6px;border-radius:50%;}
+  .cz-seal svg{width:100%;height:100%;display:block;overflow:visible;}
+  .cz-seal-half{display:none;position:absolute;inset:0;}
+  .cz-seal-half.hl{clip-path:inset(0 50% 0 0);} .cz-seal-half.hr{clip-path:inset(0 0 0 50%);}
+  .cz.is-broken .cz-seal{animation:none;pointer-events:none;outline:none;}
+  .cz.is-broken .cz-seal-whole{display:none;}
+  .cz.is-broken .cz-seal-half{display:block;}
+  .cz.is-broken .cz-seal-half.hl{animation:czCrackL 1s cubic-bezier(.5,0,.9,.5) forwards;}
+  .cz.is-broken .cz-seal-half.hr{animation:czCrackR 1s cubic-bezier(.5,0,.9,.5) forwards;}
+  @keyframes czBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  @keyframes czCrackL{0%{transform:none;opacity:1}100%{transform:translate(-34px,46px) rotate(-24deg);opacity:0}}
+  @keyframes czCrackR{0%{transform:none;opacity:1}100%{transform:translate(34px,52px) rotate(22deg);opacity:0}}
+  body.vs-lock{overflow:hidden;}
+
+  /* ================= SCROLL: liquid reveal, parallax, gold progress thread ================= */
+  .rv{opacity:0;transform:translate3d(0,42px,0) scale(.97);filter:blur(8px);
+    transition:opacity 1.1s cubic-bezier(.22,1,.36,1),transform 1.1s cubic-bezier(.22,1,.36,1),filter 1.1s cubic-bezier(.22,1,.36,1);
+    will-change:opacity,transform,filter;}
+  .rv.rv-in{opacity:1;transform:none;filter:none;}
+  .scrollbar{position:fixed;left:0;right:0;top:0;height:3px;z-index:26;pointer-events:none;}
+  .scrollbar i{display:block;height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
+    background:linear-gradient(90deg,#F05A4A,#E2B04A,#FFE9A8);box-shadow:0 0 12px rgba(245,207,122,.85);will-change:transform;}
+  @media (prefers-reduced-motion:reduce){
+    .cz-seal{animation:none;} .cz-title,.cz-sub,.cz-star{animation:none;}
+  }}
 </style>
 </head>
-<body>
+<body class="vs-lock">
+<div class="cz" id="cz" role="dialog" aria-modal="true" aria-label="Break the wax seal to open the curtains">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="waxShape" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="12" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G" result="shape"/>
+        <feGaussianBlur in="shape" stdDeviation="2.2" result="bump"/>
+        <feSpecularLighting in="bump" surfaceScale="6" specularConstant="1.25" specularExponent="30" lighting-color="#FFD9CC" result="spec">
+          <fePointLight x="30" y="10" z="80"/>
+        </feSpecularLighting>
+        <feComposite in="spec" in2="shape" operator="in" result="specIn"/>
+        <feDiffuseLighting in="bump" surfaceScale="4" diffuseConstant="1.05" lighting-color="#FFFFFF" result="diff">
+          <fePointLight x="26" y="8" z="95"/>
+        </feDiffuseLighting>
+        <feComposite in="diff" in2="shape" operator="in" result="diffIn"/>
+        <feComposite in="shape" in2="diffIn" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="shaded"/>
+        <feComposite in="shaded" in2="specIn" operator="arithmetic" k1="0" k2="1" k3="0.8" k4="0"/>
+      </filter>
+      <filter id="waxBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4.5"/></filter>
+      <filter id="waxSoft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0.9"/></filter>
+      <radialGradient id="waxG" gradientUnits="userSpaceOnUse" cx="46" cy="38" r="80">
+        <stop offset="0" stop-color="#B21E2C"/><stop offset=".45" stop-color="#8A1220"/><stop offset=".85" stop-color="#5C0A14"/><stop offset="1" stop-color="#3F050C"/>
+      </radialGradient>
+      <radialGradient id="waxDisc" cx=".42" cy=".38" r=".75">
+        <stop offset="0" stop-color="#9A1626"/><stop offset=".7" stop-color="#7A0F1C"/><stop offset="1" stop-color="#620A15"/>
+      </radialGradient>
+      <radialGradient id="waxGloss" cx=".3" cy=".25" r=".7">
+        <stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </radialGradient>
+      <path id="waxPetal" d="M0 -2C5 -8 5 -16 0 -21C-5 -16 -5 -8 0 0Z"/>
+      <g id="waxEmblem">
+        <use href="#waxPetal"/><use href="#waxPetal" transform="rotate(45)"/><use href="#waxPetal" transform="rotate(90)"/><use href="#waxPetal" transform="rotate(135)"/>
+        <use href="#waxPetal" transform="rotate(180)"/><use href="#waxPetal" transform="rotate(225)"/><use href="#waxPetal" transform="rotate(270)"/><use href="#waxPetal" transform="rotate(315)"/>
+        <circle r="4"/>
+      </g>
+      <path id="waxRing" d="M34.5 60A25.5 25.5 0 1 1 85.5 60A25.5 25.5 0 1 1 34.5 60"/>
+      <g id="waxLegend">
+        <text font-family="Cinzel,serif" font-weight="900" font-size="8.2"><textPath href="#waxRing" textLength="155" lengthAdjust="spacing">THE_DIBRUGARH • THE_DIBRUGARH •</textPath></text>
+      </g>
+      <symbol id="waxSeal" viewBox="0 0 120 120" overflow="visible">
+        <ellipse cx="65" cy="73" rx="46" ry="42" fill="#000" opacity=".5" filter="url(#waxBlur)"/>
+        <g filter="url(#waxShape)">
+          <circle cx="60" cy="60" r="45" fill="url(#waxG)"/>
+          <circle cx="14" cy="62" r="8" fill="url(#waxG)"/><circle cx="105" cy="70" r="7" fill="url(#waxG)"/>
+          <circle cx="82" cy="98" r="8" fill="url(#waxG)"/><circle cx="30" cy="96" r="7" fill="url(#waxG)"/>
+          <circle cx="50" cy="13" r="6" fill="url(#waxG)"/><circle cx="96" cy="30" r="7" fill="url(#waxG)"/>
+        </g>
+        <circle cx="60" cy="60" r="37.5" fill="none" stroke="#FF8A78" stroke-width="2.6" opacity=".38" transform="translate(.8 .9)" filter="url(#waxSoft)"/>
+        <circle cx="60" cy="60" r="37.5" fill="none" stroke="#32040a" stroke-width="2.8" opacity=".65" transform="translate(-.8 -.9)" filter="url(#waxSoft)"/>
+        <circle cx="60" cy="60" r="35" fill="url(#waxDisc)"/>
+        <use href="#waxLegend" fill="#FF9A88" opacity=".5" transform="translate(.6 .7)"/>
+        <use href="#waxLegend" fill="#2a0308" opacity=".85" transform="translate(-.5 -.6)"/>
+        <use href="#waxLegend" fill="#6a0b17"/>
+        <g transform="translate(60 60) scale(.62)">
+          <use href="#waxEmblem" fill="#FF9A88" opacity=".5" transform="translate(1.2 1.2)"/>
+          <use href="#waxEmblem" fill="#2a0308" opacity=".85" transform="translate(-1 -1)"/>
+          <use href="#waxEmblem" fill="#6a0b17"/>
+        </g>
+        <path d="M88 76A30 30 0 0 1 60 91" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".35" filter="url(#waxSoft)"/>
+        <ellipse cx="40" cy="34" rx="24" ry="14" fill="url(#waxGloss)" transform="rotate(-28 40 34)" opacity=".55"/>
+      </symbol>
+    
+      <linearGradient id="gSk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9c7a2a"/><stop offset=".35" stop-color="#F3DE9A"/><stop offset=".65" stop-color="#CFA84E"/><stop offset="1" stop-color="#85641d"/></linearGradient>
+      <radialGradient id="gHead" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFF3C6"/><stop offset=".55" stop-color="#D9B863"/><stop offset="1" stop-color="#85641d"/></radialGradient>
+      <linearGradient id="gBand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d6c22"/><stop offset=".4" stop-color="#F0DA94"/><stop offset="1" stop-color="#8d6c22"/></linearGradient>
+    </defs>
+  </svg>
+  <div class="cz-back"></div>
+  <div class="cz-side cz-side-l"><div class="cz-panel"><div class="cz-fabric"></div></div><div class="cz-tie"><svg viewBox="-14 -16 150 260" aria-hidden="true"></svg></div></div>
+  <div class="cz-side cz-side-r"><div class="cz-panel"><div class="cz-fabric"></div></div><div class="cz-tie"><svg viewBox="-14 -16 150 260" aria-hidden="true"></svg></div></div>
+  <div class="cz-rod"></div>
+  <div class="cz-center">
+    <div class="cz-intro" id="czIntro">
+      <img class="cz-logo" id="czLogo" alt="The Dibrugarh" />
+      <p class="cz-title">Shree Durga Puja Competition 2026</p>
+      <p class="cz-sub">Presented by @the_dibrugarh</p>
+      <div class="cz-spark" id="czSpark" aria-hidden="true"></div>
+    </div>
+    <div class="cz-seam"><svg viewBox="-100 -30 200 240" aria-hidden="true" id="czSeamSvg"></svg></div>
+    <button type="button" class="cz-seal" id="czSeal" aria-label="Break the wax seal to open the curtains">
+      <span class="cz-seal-whole"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
+      <span class="cz-seal-half hl"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
+      <span class="cz-seal-half hr"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
+    </button>
+    <p class="cz-hint">Tap the wax seal to open the curtains</p>
+  </div>
+</div>
+<div class="scrollbar" aria-hidden="true"><i id="scrollBar"></i></div>
+
 <div class="gamusa-strip" aria-hidden="true"></div>
 <div class="bg-texture"></div>
 <div class="bg-motif"></div>
@@ -754,13 +954,13 @@
       </div>
       <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
       <div class="gate-step gate-locked" id="stepGoogle">
-        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Step 2 — Sign in with Google or Phone Number <span class="lock-tag" id="googleLock">🔒 Locked until Step 1 is done</span></div>
+        <div class="gate-label"><span class="gate-check" id="checkGoogle">✓</span> Step 2 — Sign in with Google or phone <span class="lock-tag" id="googleLock">🔒 Locked until Step 1 is done</span></div>
         <div class="g-frame" id="gFrame"><div class="g-placeholder" id="gPlaceholder">Complete Step 1 to unlock Google sign-in</div><div id="gSignInDiv"></div></div>
-        <!-- <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div> -->
+        <div class="gate-note g-note">We only use your verified email — your Google password is never seen or stored.</div>
         <div id="phoneBlock">
           <div class="or-sep">— OR —</div>
           <div class="ig-input-row"><span class="at">+91</span><input type="tel" id="phoneInput" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" autocomplete="tel-national" disabled /></div>
-          <button type="button" class="vote-btn modal-go" id="phoneBtn" style="margin-top:10px" disabled>Continue with Phone Number</button>
+          <button type="button" class="vote-btn modal-go" id="phoneBtn" style="margin-top:10px" disabled>Continue with phone</button>
         </div>
         <div class="signed-in-pill" id="signedInPill">
           <span>✅</span> Signed in as <strong id="signedInName">—</strong>
@@ -1444,6 +1644,162 @@ window.addEventListener("DOMContentLoaded", async () => {
   loadResults();
   setInterval(() => { if(!document.hidden) loadResults(); }, 15000);
 });
+
+// ---- Royal curtains: open when the wax seal is pressed ----
+(function(){
+  const cz = $("cz"), seal = $("czSeal"), src = $("logoR");
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const bar = $("scrollBar");
+
+  // ---------- scroll: gold progress thread + parallax mandalas (eased) ----------
+  const arts = Array.from(document.querySelectorAll(".bg-art i"));
+  const speeds = [.05, .09, .04, .11, .07];
+  let cur = 0, py = 0, raf = 0;
+  function scrollFrame(){
+    const y = window.scrollY, max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    cur += (Math.min(1, y / max) - cur) * 0.12;
+    py  += (y - py) * 0.08;
+    bar.style.transform = "scaleX(" + cur.toFixed(4) + ")";
+    if(!reduce) arts.forEach((el, i) => { el.style.translate = "0 " + (-py * speeds[i % speeds.length]).toFixed(1) + "px"; });
+    if(Math.abs(y / max - cur) > 0.0005 || Math.abs(y - py) > 0.3) raf = requestAnimationFrame(scrollFrame);
+    else raf = 0;
+  }
+  function kick(){ if(!raf) raf = requestAnimationFrame(scrollFrame); }
+  addEventListener("scroll", kick, {passive:true});
+  addEventListener("resize", kick);
+  kick();
+
+  // ---------- scroll: cards glide up out of a soft blur ----------
+  function startReveals(){
+    const cards = Array.from(document.querySelectorAll(".card:not(.thankyou-card)"));
+    if(reduce || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add("rv-in"); io.unobserve(e.target); }
+    }), {threshold: .12, rootMargin: "0px 0px -6% 0px"});
+    cards.forEach(el => { el.classList.add("rv"); io.observe(el); });
+  }
+
+  if(!cz || !seal){ document.body.classList.remove("vs-lock"); startReveals(); return; }
+  if(src) $("czLogo").src = src.src;
+
+  // ---------- gold twisted rope + tassel drawing ----------
+  const OUT = "#69490f", GOLD = "#D9B863", HI = "#FFF2C2";
+  function bez(p0, p1, p2, p3, n){
+    const pts = []; let L = 0, prev = null;
+    for(let i = 0; i <= n; i++){
+      const t = i / n, u = 1 - t;
+      const x = u*u*u*p0[0] + 3*u*u*t*p1[0] + 3*u*t*t*p2[0] + t*t*t*p3[0];
+      const y = u*u*u*p0[1] + 3*u*u*t*p1[1] + 3*u*t*t*p2[1] + t*t*t*p3[1];
+      const dx = 3*u*u*(p1[0]-p0[0]) + 6*u*t*(p2[0]-p1[0]) + 3*t*t*(p3[0]-p2[0]);
+      const dy = 3*u*u*(p1[1]-p0[1]) + 6*u*t*(p2[1]-p1[1]) + 3*t*t*(p3[1]-p2[1]);
+      const m = Math.hypot(dx, dy) || 1;
+      if(prev) L += Math.hypot(x - prev[0], y - prev[1]);
+      prev = [x, y];
+      pts.push({x, y, nx: -dy / m, ny: dx / m, L});
+    }
+    return pts;
+  }
+  function rope(pts, o){
+    const amp = o.amp || 2.2, per = o.per || 8, w = o.w || 3.4;
+    const strands = [0, 1].map(k => pts.map(p => {
+      const th = 2 * Math.PI * p.L / per + k * Math.PI, off = amp * Math.sin(th);
+      return {x: p.x + p.nx * off, y: p.y + p.ny * off, front: Math.cos(th) > 0};
+    }));
+    const full = st => "M" + st.map(q => q.x.toFixed(2) + " " + q.y.toFixed(2)).join("L");
+    const runs = st => { let d = "", open = false;
+      st.forEach((q, i) => {
+        if(q.front){ d += (open ? "L" : "M") + q.x.toFixed(2) + " " + q.y.toFixed(2); open = true; }
+        else if(open){ d += "L" + q.x.toFixed(2) + " " + q.y.toFixed(2); open = false; }
+      }); return d; };
+    const draw = d => '<path d="' + d + '" stroke="' + OUT + '" stroke-width="' + (w + 1.7) + '"/>' +
+                      '<path d="' + d + '" stroke="' + GOLD + '" stroke-width="' + w + '"/>' +
+                      '<path d="' + d + '" stroke="' + HI + '" stroke-width="' + (w * .32) + '" opacity=".75" transform="translate(-.5 -.5)"/>';
+    return '<g fill="none" stroke-linecap="round" stroke-linejoin="round">' +
+           draw(full(strands[0])) + draw(full(strands[1])) + draw(runs(strands[0])) + '</g>';
+  }
+  function tassel(cx, cy, len){
+    let g = '';
+    const y0 = cy + 16, y1 = y0 + len;
+    g += '<ellipse cx="' + cx + '" cy="' + (cy - 12) + '" rx="3.2" ry="2.2" fill="url(#gHead)" stroke="' + OUT + '" stroke-width=".5"/>';
+    // fringe skirt
+    g += '<path d="M' + (cx-6.5) + ' ' + y0 + 'L' + (cx+6.5) + ' ' + y0 + 'L' + (cx+12.8) + ' ' + y1 + 'Q' + cx + ' ' + (y1+3) + ' ' + (cx-12.8) + ' ' + y1 + 'Z" fill="url(#gSk)" stroke="' + OUT + '" stroke-width=".6"/>';
+    for(let i = 0; i <= 18; i++){
+      const f = i / 18, xt = cx - 6.5 + 13 * f, xb = cx - 12.8 + 25.6 * f + (Math.random() - .5) * 1.6, yb = y1 + 1 + Math.random() * 3.2;
+      g += '<path d="M' + xt.toFixed(1) + ' ' + y0 + 'L' + xb.toFixed(1) + ' ' + yb.toFixed(1) + '" stroke="' + (i % 2 ? HI : "#6e4f12") + '" stroke-width=".75" opacity="' + (i % 2 ? .55 : .5) + '"/>';
+    }
+    g += '<path d="M' + (cx-7.4) + ' ' + (y0+5) + 'Q' + cx + ' ' + (y0+8) + ' ' + (cx+7.4) + ' ' + (y0+5) + '" fill="none" stroke="' + OUT + '" stroke-width="1.6"/>' +
+         '<path d="M' + (cx-7.4) + ' ' + (y0+4.4) + 'Q' + cx + ' ' + (y0+7.4) + ' ' + (cx+7.4) + ' ' + (y0+4.4) + '" fill="none" stroke="' + HI + '" stroke-width=".7" opacity=".8"/>';
+    // neck bands + ball head
+    for(let k = 0; k < 3; k++) g += '<ellipse cx="' + cx + '" cy="' + (cy + 10.5 + k * 2.7) + '" rx="' + (6.8 - k * .3) + '" ry="1.7" fill="url(#gBand)" stroke="' + OUT + '" stroke-width=".5"/>';
+    g += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="8.6" ry="10.2" fill="url(#gHead)" stroke="' + OUT + '" stroke-width=".8"/>';
+    g += '<path d="M' + (cx-8) + ' ' + (cy-3.2) + 'Q' + cx + ' ' + (cy-.6) + ' ' + (cx+8) + ' ' + (cy-3.2) + 'M' + (cx-8.2) + ' ' + (cy+3) + 'Q' + cx + ' ' + (cy+5.6) + ' ' + (cx+8.2) + ' ' + (cy+3) + '" fill="none" stroke="#7d5d1a" stroke-width="1"/>';
+    g += '<ellipse cx="' + (cx-2.8) + '" cy="' + (cy-4) + '" rx="2.2" ry="3" fill="#fff" opacity=".4"/>';
+    return g;
+  }
+  function knot(x, y){
+    return '<ellipse cx="' + x + '" cy="' + y + '" rx="6.2" ry="8" fill="url(#gHead)" stroke="' + OUT + '" stroke-width=".8"/>' +
+           '<path d="M' + (x-6) + ' ' + (y-2.6) + 'Q' + x + ' ' + (y-.4) + ' ' + (x+6) + ' ' + (y-2.6) + 'M' + (x-6) + ' ' + (y+2.6) + 'Q' + x + ' ' + (y+4.8) + ' ' + (x+6) + ' ' + (y+2.6) + '" fill="none" stroke="#7d5d1a" stroke-width=".9"/>';
+  }
+  // side tie-back: double rope from the screen edge to a knot, two cords, two tassels (as in the reference)
+  function tieMarkup(){
+    return rope(bez([-10,-12],[10,-4],[32,14],[48,27], 40), {w:3.6, amp:2.2, per:8.4}) +
+           rope(bez([-10,-1],[12,7],[34,22],[50,32], 40), {w:3.6, amp:2.2, per:8.4}) +
+           rope(bez([47,34],[45,70],[37,100],[38,134], 40), {w:2.7, amp:1.6, per:7.4}) +
+           rope(bez([53,34],[57,58],[62,82],[62,100], 30), {w:2.7, amp:1.6, per:7.4}) +
+           tassel(38, 146, 70) + tassel(62, 112, 58) + knot(50, 35);
+  }
+  document.querySelectorAll(".cz-tie svg").forEach(sv => { sv.innerHTML = tieMarkup(); });
+  // closed curtains: gold rope across the seam with two tassels hanging under the seal
+  $("czSeamSvg").innerHTML =
+      rope(bez([-100,-8],[-40,8],[40,8],[100,-8], 60), {w:3.6, amp:2.2, per:8.4}) +
+      rope(bez([-100,2],[-40,18],[40,18],[100,2], 60), {w:3.6, amp:2.2, per:8.4}) +
+      rope(bez([-6,40],[-8,70],[-14,94],[-14,112], 30), {w:2.7, amp:1.6, per:7.4}) +
+      rope(bez([6,40],[10,60],[18,76],[18,92], 30), {w:2.7, amp:1.6, per:7.4}) +
+      tassel(-14, 124, 60) + tassel(18, 104, 50);
+
+  // ---------- twinkling stars over the title/logo ----------
+  const spark = $("czSpark");
+  for(let i = 0; i < 26; i++){
+    const st = document.createElement("i"), sz = 5 + Math.random() * 10;
+    st.className = "cz-star";
+    st.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "%;top:" + (Math.random() * 100).toFixed(1) + "%;width:" + sz.toFixed(1) +
+      "px;height:" + sz.toFixed(1) + "px;--d:" + (1.4 + Math.random() * 1.8).toFixed(2) + "s;--dl:" + (-Math.random() * 3).toFixed(2) + "s";
+    spark.appendChild(st);
+  }
+  function burst(){
+    const r = $("czIntro").getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height * .55;
+    for(let i = 0; i < 46; i++){
+      const b = document.createElement("i"), a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 190, sz = 6 + Math.random() * 12;
+      b.className = "cz-burst";
+      b.style.cssText = "left:" + (cx - sz / 2) + "px;top:" + (cy - sz / 2) + "px;width:" + sz + "px;height:" + sz + "px;--dx:" +
+        (Math.cos(a) * d).toFixed(0) + "px;--dy:" + (Math.sin(a) * d * .8).toFixed(0) + "px;--dl:" + (Math.random() * .5).toFixed(2) + "s";
+      cz.appendChild(b); setTimeout(() => b.remove(), 2600);
+    }
+  }
+
+  // gathered size: ~24% of the width (70-250px); knot sits at the pinch
+  function sizeGather(){
+    const vw = innerWidth, top = Math.max(70, Math.min(250, vw * .24));
+    cz.style.setProperty("--gs", (top / (vw * .504)).toFixed(4));
+    cz.style.setProperty("--ts", Math.max(.85, Math.min(1.7, top / 94)).toFixed(3));
+  }
+  sizeGather(); addEventListener("resize", sizeGather);
+
+  let opened = false;
+  seal.addEventListener("click", () => {
+    if(opened) return; opened = true;
+    if(reduce){ cz.remove(); document.body.classList.remove("vs-lock"); startReveals(); return; }
+    cz.classList.add("is-broken"); burst();                                 // seal cracks, rope drops, stars burst
+    setTimeout(() => cz.classList.add("is-open"), 900);                     // curtains part and gather
+    setTimeout(() => {                                                      // damask fades to the page
+      cz.classList.add("is-reveal");
+      document.body.classList.remove("vs-lock");
+      startReveals();
+    }, 3500);
+    setTimeout(() => cz.classList.add("is-leave"), 5900);                   // curtains draw away: no side padding left
+    setTimeout(() => cz.remove(), 7500);
+  });
+})();
 </script>
 </body>
 </html>

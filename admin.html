@@ -156,7 +156,7 @@
       <div class="stat"><div class="num" id="sTotal">–</div><div class="lbl">Total votes</div></div>
       <div class="stat"><div class="num" id="sPandals">–</div><div class="lbl">Pandals with votes</div></div>
       <div class="stat"><div class="num" id="sLeader">–</div><div class="lbl">Currently leading</div></div>
-      <div class="stat"><div class="num" id="sFlag">–</div><div class="lbl">Same-device votes</div></div>
+      <div class="stat"><div class="num" id="sFlag">–</div><div class="lbl">Flagged votes</div></div>
     </div>
 
     <div class="search"><span class="ic">🔍</span><input type="text" id="search" placeholder="Filter by pandal name or email..." /></div>
@@ -222,7 +222,7 @@
     keys.forEach(k => { if(groups[k].length > max){ max = groups[k].length; leader = k; } });
     $("sTotal").innerText = allVotes.length; $("sPandals").innerText = keys.length;
     $("sLeader").innerText = leader.length > 14 ? leader.slice(0,14) + "…" : leader;
-    $("sFlag").innerText = allVotes.filter(v => v.possibleDuplicateDevice).length;
+    $("sFlag").innerText = allVotes.filter(v => v.possibleDuplicateDevice || v.ipFlag || v.gpsFlag).length;
   }
   function renderGroups(filter=""){
     const box = $("groups"); box.innerHTML = ""; const f = filter.toLowerCase();
@@ -237,7 +237,7 @@
         <div class="vlist">
           ${voters.map(v => `
             <div class="vrow">
-              <span class="who">${esc(v.voterId)}${v.possibleDuplicateDevice ? `<span class="flag" title="${esc(v.deviceFlag)}">same device</span>` : ""}</span>
+              <span class="who">${esc(v.voterId)}${v.possibleDuplicateDevice ? `<span class="flag" title="${esc(v.deviceFlag)}">same device</span>` : ""}${v.ipFlag ? `<span class="flag">same IP</span>` : ""}${v.gpsFlag ? `<span class="flag">same location</span>` : ""}${v.voterType === "phone" ? `<span class="flag" style="background:var(--gold)">phone</span>` : ""}</span>
               <span class="right"><span class="time">${v.timestamp ? esc(new Date(v.timestamp).toLocaleString()) : ""}</span>
               <button class="ib warn dq" data-id="${esc(v.voterId)}">Disqualify</button></span>
             </div>`).join("")}
@@ -263,7 +263,7 @@
 
   $("csvBtn").addEventListener("click", () => {
     const cell = s => { let t = String(s == null ? "" : s); if(/^[=+\-@\t\r]/.test(t)) t = "'" + t; return '"' + t.replace(/"/g,'""') + '"'; };
-    const rows = [["Timestamp","Email","Pandal ID","Pandal","Device flag"]].concat(allVotes.map(v => [v.timestamp, v.voterId, v.pandalId, v.pandalName, v.deviceFlag]));
+    const rows = [["Timestamp","Voter","Type","Pandal ID","Pandal","Device flag","IP","Lat","Lng","IP flag","GPS flag"]].concat(allVotes.map(v => [v.timestamp, v.voterId, v.voterType, v.pandalId, v.pandalName, v.deviceFlag, v.ip, v.lat, v.lng, v.ipFlag, v.gpsFlag]));
     const blob = new Blob([rows.map(r => r.map(cell).join(",")).join("\n")], {type:"text/csv"});
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "durga-puja-2026-votes.csv"; a.click();
   });

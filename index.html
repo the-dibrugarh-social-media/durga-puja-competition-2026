@@ -981,7 +981,7 @@
         </label>
         <div class="gate-note">
           Your vote counts <b>only if you follow @the_dibrugarh</b> on Instagram — votes from people who
-          don't follow will be removed. We also record your location, IP address and basic device information with your vote solely to help flag duplicate voting.
+          don't follow will be removed. We also record your location (if you allow it), IP address and basic device information with your vote solely to help flag duplicate voting.
         </div>
       </div>
       <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
@@ -1117,7 +1117,7 @@
       <li><b>One vote per person.</b> Duplicate votes — same Google account or device — will be deleted.</li>
       <li><b>Fake votes will be removed,</b> including votes from people who don't follow @the_dibrugarh.</li>
       <li>Once submitted, your vote can't be changed.</li>
-      <li>To catch fake and duplicate votes, we store your Google email or phone number, your location, IP address and a device fingerprint with your vote. We never see your Google password.</li>
+      <li>To catch fake and duplicate votes, we store your Google email or phone number, your location (if you allow it), IP address and a device fingerprint with your vote. We never see your Google password.</li>
     </ul>
     <div class="modal-actions">
       <button type="button" class="vote-btn modal-go" id="rulesConfirm">I understand, Submit vote</button>
@@ -1409,6 +1409,7 @@ function handleCredentialResponse(response){
   document.getElementById("signedInName").textContent = (payload && (payload.name || payload.email)) || "your Google account";
   document.getElementById("gFrame").style.display = "none";
   updateGate_();
+  requestGpsEarly_();
   if(votedEmails_().includes(currentEmail_())) showDup_("This Google account has already voted from this device.");
 }
 
@@ -1427,20 +1428,38 @@ function usePhone_(){
   $("gFrame").style.display = "none";
   $("phoneBlock").style.display = "none";
   updateGate_();
+  requestGpsEarly_();
   if(votedEmails_().includes(currentEmail_())) showDup_("This phone number has already voted from this device.");
 }
 
-// ---- GPS (required) ----
+// ---- GPS (asked for everyone, but NEVER blocks voting) ----
+let gpsCache_ = null, gpsAsked_ = false;
+function gpsFallback_(reason){ return { lat: "", lng: "", accuracy: "", status: reason }; }
 function getGps_(){
-  return new Promise((resolve, reject) => {
-    if(!navigator.geolocation){ reject(new Error("unsupported")); return; }
-    navigator.geolocation.getCurrentPosition(
-      pos => resolve({ lat: pos.coords.latitude.toFixed(5), lng: pos.coords.longitude.toFixed(5), accuracy: Math.round(pos.coords.accuracy) }),
-      err => reject(err),
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
+  return new Promise(resolve => {
+    if(!navigator.geolocation){ resolve(gpsFallback_("unsupported")); return; }
+    let done = false;
+    const guard = setTimeout(() => finish(gpsFallback_("timeout")), 20000);
+    const finish = v => { if(done) return; done = true; clearTimeout(guard); resolve(v); };
+    const ok = pos => {
+      const g = { lat: pos.coords.latitude.toFixed(5), lng: pos.coords.longitude.toFixed(5),
+                  accuracy: Math.round(pos.coords.accuracy), status: "ok" };
+      gpsCache_ = g; finish(g);
+    };
+    const fail = err => finish(gpsFallback_(err && err.code === 1 ? "denied" : "unavailable"));
+    navigator.geolocation.getCurrentPosition(ok, err => {
+      if(err && err.code === 1) return fail(err);
+      navigator.geolocation.getCurrentPosition(ok, fail,
+        { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
+    }, { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 });
   });
 }
+function requestGpsEarly_(){
+  if(gpsAsked_) return;
+  gpsAsked_ = true;
+  getGps_().catch(() => {});
+}
+
 function getDeviceInfo_(){
   return { userAgent: navigator.userAgent, screen: screen.width + "x" + screen.height,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, language: navigator.language, platform: navigator.platform };
@@ -1585,10 +1604,8 @@ function burst(){
 
 async function submitVote(p){
   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
-  let gps;
-  try{ gps = await getGps_(); }
-  catch(e){ showToast("Location is required to vote. Please allow location access in your browser and try again.", 5200); return; }
-  busyId = p.id; renderPandals();
+  const gps = gpsCache_ || await getGps_();
+    busyId = p.id; renderPandals();
   try{
     const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);
     const res = await fetch(SCRIPT_URL, {
@@ -1636,7 +1653,7 @@ async function loadResults(){
     const sig = JSON.stringify(top.map(r => [r.p.id, r.n])) + "|" + total;
     if(sig === resultsSig) return;          // nothing changed: don't redraw or replay animations
     resultsSig = sig;
-    meta.textContent = total ? `${total} ${total === 1 ? "vote" : "votes"} so far · top 5 shown` : "";
+    meta.textContent = total ? `${total} ${total === 1 ? "vote" : "votes"} so far · top 10 shown` : "";
     if(!total){
       el.innerHTML = `<p class="result-loading">No votes yet — be the first!</p>`;
       return;

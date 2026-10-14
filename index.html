@@ -1045,7 +1045,7 @@
         <div class="seal"><svg class="icon" viewBox="0 0 24 24"><use href="#i-laurel"/></svg></div>
         <div>
           <h2>Who's Leading Tonight</h2>
-          <div class="sub">Top 5 — updates live as the votes come in</div>
+          <div class="sub">Top 10 — updates live as the votes come in</div>
         </div>
       </div>
       <div class="pandal-meta" id="resultsMeta"></div>
@@ -1632,7 +1632,7 @@ async function loadResults(){
     const all = pandals.map(p => ({ p: p, n: Number(counts[p.id]) || 0 }));
     const total = all.reduce((t, r) => t + r.n, 0);
     const top = all.filter(r => r.n > 0)
-      .sort((a, b) => b.n - a.n || String(a.p.name).localeCompare(String(b.p.name))).slice(0, 5);
+      .sort((a, b) => b.n - a.n || String(a.p.name).localeCompare(String(b.p.name))).slice(0, 10);
     const sig = JSON.stringify(top.map(r => [r.p.id, r.n])) + "|" + total;
     if(sig === resultsSig) return;          // nothing changed: don't redraw or replay animations
     resultsSig = sig;

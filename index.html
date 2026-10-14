@@ -706,11 +706,43 @@
     background:linear-gradient(90deg,#F05A4A,#E2B04A,#FFE9A8);box-shadow:0 0 12px rgba(245,207,122,.85);will-change:transform;}
   @media (prefers-reduced-motion:reduce){
     .cz-seal{animation:none;} .cz-title,.cz-sub,.cz-star{animation:none;}
-  }}
+  }
+
+/* ===== patch3: calmer text sparkle ===== */
+.cz-title,.cz-sub{animation-duration:7s !important;}
+.cz-title{filter:drop-shadow(0 0 3px rgba(255,214,120,.3)) drop-shadow(0 2px 6px rgba(0,0,0,.7)) !important;}
+.cz-sub{filter:drop-shadow(0 0 2px rgba(255,214,120,.25)) !important;}
+@keyframes czTwinkle{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:.65;transform:scale(1) rotate(45deg)}}
+.cz-star{filter:drop-shadow(0 0 2px rgba(255,225,140,.7)) !important;}
+
+/* ===== patch3: bigger curtain text ===== */
+.cz-logo{width:clamp(110px,32vw,160px) !important; height:clamp(110px,32vw,160px) !important;}
+.cz-title{font-size:clamp(18px,5.8vw,28px) !important; letter-spacing:.1em !important; line-height:1.3;}
+.cz-sub{font-size:clamp(19px,5.2vw,25px) !important;}
+.cz-intro{gap:12px; bottom:calc(50% + 78px) !important;}
+
+/* ===== patch3: Instagram-style sparkle sweep (left -> right) ===== */
+.cz-sweep{position:absolute; top:-10%; bottom:-10%; left:0; width:46%; z-index:9; pointer-events:none;
+  background:linear-gradient(100deg,transparent 0%,rgba(255,226,150,.0) 18%,rgba(255,236,190,.28) 42%,rgba(255,255,255,.62) 50%,rgba(255,236,190,.28) 58%,rgba(255,226,150,.0) 82%,transparent 100%);
+  mix-blend-mode:screen; transform:translateX(-120%) skewX(-14deg); opacity:0;
+  animation:czSweep 1.25s cubic-bezier(.45,.05,.25,1) forwards;}
+@keyframes czSweep{0%{transform:translateX(-120%) skewX(-14deg);opacity:0}12%{opacity:1}85%{opacity:1}100%{transform:translateX(280%) skewX(-14deg);opacity:0}}
+.cz-sw-star{position:absolute; z-index:10; display:block; pointer-events:none; opacity:0;
+  background:radial-gradient(circle,#fff 0,#FFF1C2 40%,#F5CF7A 75%);
+  clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+  filter:drop-shadow(0 0 5px rgba(255,235,170,.95));
+  animation:czSwStar .8s ease-out var(--dl,0s) forwards;}
+@keyframes czSwStar{0%{opacity:0;transform:scale(.1) rotate(0)}30%{opacity:1;transform:scale(1.15) rotate(40deg)}100%{opacity:0;transform:scale(.3) rotate(110deg)}}
+@media (prefers-reduced-motion: reduce){ .cz-sweep,.cz-sw-star{display:none;} }
+
+/* ===== patch4: tap anywhere ===== */
+.cz{cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+.cz *{cursor:pointer;}
+.cz-center{pointer-events:auto !important;}
 </style>
 </head>
 <body class="vs-lock">
-<div class="cz" id="cz" role="dialog" aria-modal="true" aria-label="Break the wax seal to open the curtains">
+<div class="cz" id="cz" role="dialog" aria-modal="true" aria-label="Tap anywhere to open the curtains">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
       <filter id="waxShape" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
@@ -789,12 +821,12 @@
       <div class="cz-spark" id="czSpark" aria-hidden="true"></div>
     </div>
     <div class="cz-seam"><svg viewBox="-100 -30 200 240" aria-hidden="true" id="czSeamSvg"></svg></div>
-    <button type="button" class="cz-seal" id="czSeal" aria-label="Break the wax seal to open the curtains">
+    <button type="button" class="cz-seal" id="czSeal" aria-label="Tap anywhere to open the curtains">
       <span class="cz-seal-whole"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
       <span class="cz-seal-half hl"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
       <span class="cz-seal-half hr"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
     </button>
-    <p class="cz-hint">Tap the Middle to Open the Curtains</p>
+    <p class="cz-hint">Tap anywhere to open the curtains</p>
   </div>
 </div>
 <div class="scrollbar" aria-hidden="true"><i id="scrollBar"></i></div>
@@ -1759,8 +1791,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- twinkling stars over the title/logo ----------
   const spark = $("czSpark");
-  for(let i = 0; i < 26; i++){
-    const st = document.createElement("i"), sz = 5 + Math.random() * 10;
+  for(let i = 0; i < 7; i++){
+    const st = document.createElement("i"), sz = 4 + Math.random() * 6;
     st.className = "cz-star";
     st.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "%;top:" + (Math.random() * 100).toFixed(1) + "%;width:" + sz.toFixed(1) +
       "px;height:" + sz.toFixed(1) + "px;--d:" + (1.4 + Math.random() * 1.8).toFixed(2) + "s;--dl:" + (-Math.random() * 3).toFixed(2) + "s";
@@ -1785,11 +1817,33 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
   sizeGather(); addEventListener("resize", sizeGather);
 
+  function sweep(){
+    const sw = document.createElement("div");
+    sw.className = "cz-sweep";
+    cz.appendChild(sw);
+    setTimeout(() => sw.remove(), 1500);
+    const N = 44, dur = 1.0;                       // stars pop along the sweep as it passes
+    for(let i = 0; i < N; i++){
+      const f = i / N, s = document.createElement("i"), sz = 7 + Math.random() * 13;
+      s.className = "cz-sw-star";
+      s.style.cssText = "left:" + (f * 100).toFixed(1) + "%;top:" + (8 + Math.random() * 84).toFixed(1) +
+        "%;width:" + sz.toFixed(1) + "px;height:" + sz.toFixed(1) + "px;--dl:" + (f * dur + Math.random() * .12).toFixed(2) + "s";
+      cz.appendChild(s);
+      setTimeout(() => s.remove(), 2400);
+    }
+  }
   let opened = false;
-  seal.addEventListener("click", () => {
+  /*tap-anywhere*/
+  cz.addEventListener("pointerup", e => { if(!opened && e.target !== seal && !seal.contains(e.target)) cz.click(); });
+  document.addEventListener("keydown", e => {
+    if(!opened && document.body.classList.contains("vs-lock") && (e.key === "Enter" || e.key === " ")){
+      e.preventDefault(); cz.click();
+    }
+  });
+  cz.addEventListener("click", () => {
     if(opened) return; opened = true;
     if(reduce){ cz.remove(); document.body.classList.remove("vs-lock"); startReveals(); return; }
-    cz.classList.add("is-broken"); burst();                                 // seal cracks, rope drops, stars burst
+    cz.classList.add("is-broken"); burst(); sweep();                                 // seal cracks, rope drops, stars burst
     setTimeout(() => cz.classList.add("is-open"), 900);                     // curtains part and gather
     setTimeout(() => {                                                      // damask fades to the page
       cz.classList.add("is-reveal");

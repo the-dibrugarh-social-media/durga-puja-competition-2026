@@ -981,7 +981,7 @@
         </label>
         <div class="gate-note">
           Your vote counts <b>only if you follow @the_dibrugarh</b> on Instagram — votes from people who
-          don't follow will be removed. We also record your location, IP address and basic device information with your vote solely to help flag duplicate voting.
+          don't follow will be removed. We also record your IP address and basic device information with your vote solely to help flag duplicate voting.
         </div>
       </div>
       <div class="mini-div" aria-hidden="true"><svg viewBox="0 0 120 18"><use href="#i-japi" x="6" y="2" width="24" height="16"/><use href="#i-japi" x="90" y="2" width="24" height="16"/><g fill="#E8A33D"><circle cx="40" cy="9" r="1.5"/><circle cx="80" cy="9" r="1.5"/><circle cx="46" cy="9" r=".9" fill="#FFF6EA"/><circle cx="74" cy="9" r=".9" fill="#FFF6EA"/></g><path d="M60 2L65 9L60 16L55 9Z" fill="#B10F1E" stroke="#E8A33D" stroke-width=".9"/><circle cx="60" cy="9" r="1.9" fill="#FFF6EA"/><path d="M60 0V2M60 16V18" stroke="#E8A33D" stroke-width=".8"/></svg></div>
@@ -1117,7 +1117,7 @@
       <li><b>One vote per person.</b> Duplicate votes — same Google account or device — will be deleted.</li>
       <li><b>Fake votes will be removed,</b> including votes from people who don't follow @the_dibrugarh.</li>
       <li>Once submitted, your vote can't be changed.</li>
-      <li>To catch fake and duplicate votes, we store your Google email or phone number, your location, IP address and a device fingerprint with your vote. We never see your Google password.</li>
+      <li>To catch fake and duplicate votes, we store your Google email or phone number, your IP address and a device fingerprint with your vote. We never see your Google password.</li>
     </ul>
     <div class="modal-actions">
       <button type="button" class="vote-btn modal-go" id="rulesConfirm">I understand, Submit vote</button>
@@ -1441,6 +1441,16 @@ function getGps_(){
     );
   });
 }
+// Location is optional and never prompts: it is only read if the visitor
+// has ALREADY granted permission to this site. Otherwise we skip it.
+async function getGpsSilent_(){
+  try{
+    if(!navigator.geolocation || !navigator.permissions) return null;
+    const st = await navigator.permissions.query({ name: "geolocation" });
+    if(st.state !== "granted") return null;
+    return await getGps_().catch(() => null);
+  }catch(e){ return null; }
+}
 function getDeviceInfo_(){
   return { userAgent: navigator.userAgent, screen: screen.width + "x" + screen.height,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, language: navigator.language, platform: navigator.platform };
@@ -1585,9 +1595,7 @@ function burst(){
 
 async function submitVote(p){
   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
-  let gps;
-  try{ gps = await getGps_(); }
-  catch(e){ showToast("Location is required to vote. Please allow location access in your browser and try again.", 5200); return; }
+  const gps = (await getGpsSilent_()) || { lat: "", lng: "", accuracy: "", source: "none" };
   busyId = p.id; renderPandals();
   try{
     const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);

@@ -1250,7 +1250,7 @@ async function fetchFollowToken_(){
 function updateGate_(){
   const lock = $("voteLock");
   if(!followDone){
-    lock.textContent = "🔒 Voting is locked — first follow @the_dibrugarh on Instagram (Step 1), then sign in with Google (Step 2).";
+    lock.textContent = "🔒 Voting is locked — first follow @the_dibrugarh on Instagram (Step 1), then sign in with Google or Phone number (Step 2).";
     lock.dataset.target = "stepFollow"; lock.classList.add("show");
   } else if(!idToken && !phoneNumber){
     lock.textContent = "🔒 Almost there — sign in with Google or enter your phone number (Step 2) to unlock voting.";

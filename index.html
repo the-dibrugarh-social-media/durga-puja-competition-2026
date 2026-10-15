@@ -1769,7 +1769,7 @@ function renderPandals(){
       + (isBusy ? " is-busy" : "")
       + (selectedVoted && !isVoted ? " is-dim" : "")
       + (!gateOpen() ? " is-locked" : "");
-    const state = isVoted ? "\u2713" : isBusy ? "\u2026" : (!gateOpen() ? "\U0001F512" : "\u203A");
+    const state = isVoted ? "\u2713" : isBusy ? "\u2026" : (!gateOpen() ? "\uD83D\uDD12" : "\u203A");
     return `<div class="${cls}" role="button" tabindex="0" data-id="${esc(p.id)}" data-name="${esc(p.name)}" aria-label="Vote for ${esc(p.name)}"${isBusy ? ' aria-disabled="true"' : ""}>
       <div class="pandal-thumb"><svg class="durga-badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-durga"/></svg>${p.img ? `<img src="${esc(p.img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</div>
       <div class="pandal-info"><div class="pandal-name">${esc(p.name)}</div><div class="pandal-area">${esc(p.area)}</div></div>

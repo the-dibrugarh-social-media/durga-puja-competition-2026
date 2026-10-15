@@ -892,6 +892,76 @@
   .ring-wrap::before,.mini-div svg,.rule-diya,.dates-pill{animation:none !important;}
 }
 </style>
+
+<style id="perf-patch">
+/* ===== perf-patch: smoother scrolling ===== */
+html{scroll-behavior:auto;}
+@supports (overflow:clip){ html,body{overflow-x:clip;} }
+body{touch-action:manipulation; -webkit-tap-highlight-color:transparent;}
+
+/* 1. fixed full-screen layers: no blend modes, isolate their paint */
+.bg-texture{mix-blend-mode:normal !important; opacity:.09 !important; contain:strict;}
+.bg-motif{contain:strict; opacity:.5;}
+.bg-art i{animation:none !important;}              /* 5 big rotating mandalas */
+.fx-embers{contain:strict;}
+.fx-embers i{filter:none !important; will-change:transform,opacity;}
+.fx-star{filter:none !important;}
+.sparkle{filter:none !important;}
+.pandal-thumb .durga-badge{filter:none !important;}
+
+/* 2. animations that repaint every frame -> static */
+.card{
+  animation:none !important;
+  background:linear-gradient(120deg,#F5CF7A,#E2B04A 38%,#D3202B 64%,#E2B04A 84%,#F5CF7A) !important;
+  background-size:100% 100% !important;
+}
+.card-head h2,.thankyou-card h2{animation:none !important; filter:none !important; background-position:0% 0 !important;}
+.hero h1{animation:none !important; text-shadow:0 2px 0 rgba(90,10,20,.7),0 0 26px rgba(255,150,110,.4) !important;}
+.dates-pill{animation:none !important;}
+.dates-pill::after{display:none !important;}
+.vote-btn:not([disabled]):not(.voted),.modal-go{animation:none !important;}
+.qr-frame{animation:none !important; box-shadow:0 0 20px 2px rgba(226,176,74,.5);}
+.ring-wrap::before{animation:none !important;}      /* rotating masked conic rays */
+.durga-medallion{
+  animation:medallionIn 1.1s .5s cubic-bezier(.2,.8,.2,1) backwards, medallionFloat 5.5s 1.6s ease-in-out infinite !important;
+  filter:drop-shadow(0 0 20px rgba(226,176,74,.5)) !important;
+  will-change:transform;
+}
+.lantern,.strand{will-change:transform;}
+
+/* keyframes redefined (later definition wins) so they only touch opacity/transform */
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes fxFlame{0%,100%{opacity:1}50%{opacity:.82}}
+@keyframes fxDiya{0%,100%{opacity:1}50%{opacity:.85}}
+@keyframes fxWin{0%,55%{transform:translateX(-160%) skewX(-20deg)}100%{transform:translateX(480%) skewX(-20deg)}}
+.rank-row.winner::after{left:0 !important; transform:translateX(-160%) skewX(-20deg); will-change:transform;}
+
+/* 3. scroll-reveal: no blur filter, tiny movement, drop will-change when done */
+.rv{
+  filter:none !important;
+  transform:translate3d(0,24px,0);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1) !important;
+  will-change:opacity,transform;
+}
+.rv.rv-in{transform:none; will-change:auto;}
+
+/* 4. long lists / scrolling containers */
+.pandal-card{content-visibility:auto; contain-intrinsic-size:auto 86px;}
+.pandal-card:hover{transform:none !important; box-shadow:none !important;}
+.scroll-box{overscroll-behavior:auto !important; -webkit-overflow-scrolling:touch;}
+.modal-backdrop{backdrop-filter:none !important; -webkit-backdrop-filter:none !important; background:rgba(22,0,5,.86) !important;}
+
+/* 5. pause decorative animations that are off-screen (class set by IntersectionObserver) */
+.is-off,.is-off *,.is-off *::before,.is-off *::after{animation-play-state:paused !important;}
+
+/* while the finger / wheel is moving, freeze the big fixed or hero decorations */
+html.is-scrolling .fx-embers i,
+html.is-scrolling .sparkle,
+html.is-scrolling .strand,
+html.is-scrolling .lantern,
+html.is-scrolling .hero-mandala{animation-play-state:paused !important;}
+
+</style>
 </head>
 <body class="vs-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-japi" viewBox="0 0 64 44"><path d="M32 3L61 33Q32 42 3 33Z" fill="#E8C878" stroke="#8F3B30" stroke-width="1.4"/><path d="M32 3L20 36M32 3L32 38M32 3L44 36M32 3L10 34M32 3L54 34" stroke="#B7873A" stroke-width=".8" fill="none"/><path d="M9 27Q32 35 55 27" fill="none" stroke="#B10F1E" stroke-width="5"/><path d="M6.5 32.5Q32 41 57.5 32.5" fill="none" stroke="#2E7D32" stroke-width="2.6"/><path d="M14 28.6Q32 34 50 28.6" fill="none" stroke="#FFF6EA" stroke-width="1" stroke-dasharray="2 3"/><circle cx="32" cy="3" r="2.8" fill="#B10F1E" stroke="#E8A33D" stroke-width=".8"/></symbol><symbol id="i-mandala-fancy" viewBox="-50 -50 100 100"><circle r="49" fill="#7A0C18" stroke="#E8A33D" stroke-width="1.6"/><circle r="45.6" fill="none" stroke="#FFF6EA" stroke-width="0.8"/><circle cx="0.00" cy="-42.60" r="1.35" fill="#FFF6EA"/><circle cx="8.31" cy="-41.78" r="1.35" fill="#FFF6EA"/><circle cx="16.30" cy="-39.36" r="1.35" fill="#FFF6EA"/><circle cx="23.67" cy="-35.42" r="1.35" fill="#FFF6EA"/><circle cx="30.12" cy="-30.12" r="1.35" fill="#FFF6EA"/><circle cx="35.42" cy="-23.67" r="1.35" fill="#FFF6EA"/><circle cx="39.36" cy="-16.30" r="1.35" fill="#FFF6EA"/><circle cx="41.78" cy="-8.31" r="1.35" fill="#FFF6EA"/><circle cx="42.60" cy="-0.00" r="1.35" fill="#FFF6EA"/><circle cx="41.78" cy="8.31" r="1.35" fill="#FFF6EA"/><circle cx="39.36" cy="16.30" r="1.35" fill="#FFF6EA"/><circle cx="35.42" cy="23.67" r="1.35" fill="#FFF6EA"/><circle cx="30.12" cy="30.12" r="1.35" fill="#FFF6EA"/><circle cx="23.67" cy="35.42" r="1.35" fill="#FFF6EA"/><circle cx="16.30" cy="39.36" r="1.35" fill="#FFF6EA"/><circle cx="8.31" cy="41.78" r="1.35" fill="#FFF6EA"/><circle cx="0.00" cy="42.60" r="1.35" fill="#FFF6EA"/><circle cx="-8.31" cy="41.78" r="1.35" fill="#FFF6EA"/><circle cx="-16.30" cy="39.36" r="1.35" fill="#FFF6EA"/><circle cx="-23.67" cy="35.42" r="1.35" fill="#FFF6EA"/><circle cx="-30.12" cy="30.12" r="1.35" fill="#FFF6EA"/><circle cx="-35.42" cy="23.67" r="1.35" fill="#FFF6EA"/><circle cx="-39.36" cy="16.30" r="1.35" fill="#FFF6EA"/><circle cx="-41.78" cy="8.31" r="1.35" fill="#FFF6EA"/><circle cx="-42.60" cy="0.00" r="1.35" fill="#FFF6EA"/><circle cx="-41.78" cy="-8.31" r="1.35" fill="#FFF6EA"/><circle cx="-39.36" cy="-16.30" r="1.35" fill="#FFF6EA"/><circle cx="-35.42" cy="-23.67" r="1.35" fill="#FFF6EA"/><circle cx="-30.12" cy="-30.12" r="1.35" fill="#FFF6EA"/><circle cx="-23.67" cy="-35.42" r="1.35" fill="#FFF6EA"/><circle cx="-16.30" cy="-39.36" r="1.35" fill="#FFF6EA"/><circle cx="-8.31" cy="-41.78" r="1.35" fill="#FFF6EA"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(0.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(0.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(22.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(22.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(45.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(45.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(67.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(67.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(90.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(90.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(112.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(112.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(135.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(135.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(157.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(157.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(180.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(180.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(202.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(202.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(225.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(225.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(247.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(247.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(270.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(270.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(292.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(292.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(315.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(315.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(337.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(337.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(11.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(33.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(56.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(78.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(101.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(123.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(146.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(168.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(191.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(213.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(236.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(258.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(281.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(303.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(326.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(348.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(22.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(67.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(112.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(157.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(202.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(247.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(292.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(337.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(0)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(45)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(90)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(135)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(180)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(225)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(270)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(315)" fill="#2E7D32"/><circle r="10.5" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.8"/><circle cx="0.00" cy="-8.20" r="0.9" fill="#B10F1E"/><circle cx="4.10" cy="-7.10" r="0.9" fill="#B10F1E"/><circle cx="7.10" cy="-4.10" r="0.9" fill="#B10F1E"/><circle cx="8.20" cy="-0.00" r="0.9" fill="#B10F1E"/><circle cx="7.10" cy="4.10" r="0.9" fill="#B10F1E"/><circle cx="4.10" cy="7.10" r="0.9" fill="#B10F1E"/><circle cx="0.00" cy="8.20" r="0.9" fill="#B10F1E"/><circle cx="-4.10" cy="7.10" r="0.9" fill="#B10F1E"/><circle cx="-7.10" cy="4.10" r="0.9" fill="#B10F1E"/><circle cx="-8.20" cy="0.00" r="0.9" fill="#B10F1E"/><circle cx="-7.10" cy="-4.10" r="0.9" fill="#B10F1E"/><circle cx="-4.10" cy="-7.10" r="0.9" fill="#B10F1E"/><circle r="5.6" fill="#B10F1E"/><circle r="3.6" fill="#E8A33D"/><circle r="1.6" fill="#FFF6EA"/></symbol><radialGradient id="mandalaGlow"><stop offset="0" stop-color="#FFD98A" stop-opacity=".55"/><stop offset="1" stop-color="#FFD98A" stop-opacity="0"/></radialGradient></defs></svg>
@@ -1668,7 +1738,7 @@ function renderPandals(){
     const isVoted = votedId !== null && String(p.id) === String(votedId);
     const isBusy = busyId !== null && String(p.id) === String(busyId);
     return `<div class="pandal-card">
-      <div class="pandal-thumb"><svg class="durga-badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-durga"/></svg>${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ""}</div>
+      <div class="pandal-thumb"><svg class="durga-badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-durga"/></svg>${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</div>
       <div class="pandal-info"><div class="pandal-name">${esc(p.name)}</div><div class="pandal-area">${esc(p.area)}</div></div>
       <button class="vote-btn${isVoted ? " voted" : ""}${selectedVoted && !isVoted ? " dim" : ""}" data-id="${esc(p.id)}" data-name="${esc(p.name)}"${locked ? " disabled" : ""}>${isVoted ? "Voted ✓" : isBusy ? "Voting…" : (!gateOpen() ? "🔒 Locked" : "Vote")}</button>
     </div>`;
@@ -1849,23 +1919,20 @@ window.addEventListener("DOMContentLoaded", async () => {
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bar = $("scrollBar");
 
-  // ---------- scroll: gold progress thread + parallax mandalas (eased) ----------
-  const arts = Array.from(document.querySelectorAll(".bg-art i"));
-  const speeds = [.05, .09, .04, .11, .07];
-  let cur = 0, py = 0, raf = 0;
-  function scrollFrame(){
-    const y = window.scrollY, max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-    cur += (Math.min(1, y / max) - cur) * 0.12;
-    py  += (y - py) * 0.08;
-    bar.style.transform = "scaleX(" + cur.toFixed(4) + ")";
-    if(!reduce) arts.forEach((el, i) => { el.style.translate = "0 " + (-py * speeds[i % speeds.length]).toFixed(1) + "px"; });
-    if(Math.abs(y / max - cur) > 0.0005 || Math.abs(y - py) > 0.3) raf = requestAnimationFrame(scrollFrame);
-    else raf = 0;
+  // ---------- scroll: gold progress thread (cached, rAF-throttled, no layout reads per frame) ----------
+  let maxScroll = 1, ticking = false;
+  function measure(){ maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight); }
+  function paintBar(){
+    ticking = false;
+    bar.style.transform = "scaleX(" + Math.min(1, window.scrollY / maxScroll).toFixed(3) + ")";
   }
-  function kick(){ if(!raf) raf = requestAnimationFrame(scrollFrame); }
-  addEventListener("scroll", kick, {passive:true});
-  addEventListener("resize", kick);
-  kick();
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(paintBar); } }
+  addEventListener("scroll", onScroll, {passive:true});
+  addEventListener("resize", function(){ measure(); onScroll(); }, {passive:true});
+  addEventListener("load", function(){ measure(); onScroll(); });
+  if("ResizeObserver" in window) new ResizeObserver(function(){ measure(); onScroll(); }).observe(document.body);
+  measure(); onScroll();
+
 
   // ---------- scroll: cards glide up out of a soft blur ----------
   function startReveals(){
@@ -2030,7 +2097,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   /* floating embers */
   var box = document.createElement("div"); box.className = "fx-embers"; box.setAttribute("aria-hidden","true");
-  for(var i = 0; i < 22; i++){
+  for(var i = 0; i < 8; i++){
     var e = document.createElement("i"), s = 3 + Math.random() * 6;
     e.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "%;width:" + s.toFixed(1) + "px;height:" + s.toFixed(1) +
       "px;--dx:" + (Math.random() * 120 - 60).toFixed(0) + "px;animation-duration:" + (9 + Math.random() * 12).toFixed(1) +
@@ -2040,7 +2107,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.body.appendChild(box);
 
   /* tap / click sparkles */
-  document.addEventListener("pointerdown", function(ev){
+  document.addEventListener("click", function(ev){
     for(var n = 0; n < 8; n++){
       var st = document.createElement("i"), a = (Math.PI * 2 * n / 8) + Math.random() * .5, d = 26 + Math.random() * 34;
       st.className = "fx-star";
@@ -2053,7 +2120,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   }, {passive:true});
 
   /* vote button ripple */
-  document.addEventListener("pointerdown", function(ev){
+  document.addEventListener("click", function(ev){
     var b = ev.target.closest && ev.target.closest(".vote-btn");
     if(!b || b.disabled) return;
     var r = b.getBoundingClientRect(), rp = document.createElement("span");
@@ -2088,6 +2155,25 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
   new MutationObserver(run).observe(box, {childList:true, subtree:true});
   run();
+})();
+</script>
+
+<script id="perf-patch-js">
+/* perf-patch: pause off-screen decorations + (optionally) fixed ones while scrolling */
+(function(){
+  var root = document.documentElement;
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ e.target.classList.toggle("is-off", !e.isIntersecting); });
+    }, {rootMargin:"160px 0px"});
+    document.querySelectorAll(".hero,.card,.mini-div,.foot-decor,.rule,.footer-garland").forEach(function(el){ io.observe(el); });
+  }
+  var t = 0, on = false;
+  addEventListener("scroll", function(){
+    if(!on){ on = true; root.classList.add("is-scrolling"); }
+    clearTimeout(t);
+    t = setTimeout(function(){ on = false; root.classList.remove("is-scrolling"); }, 140);
+  }, {passive:true});
 })();
 </script>
 </body>

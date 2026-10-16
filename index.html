@@ -1468,8 +1468,8 @@ function parseJwt_(token){
 // UI cannot be skipped by editing the page.
 const FOLLOW_MIN_SECONDS = 6;        // must wait at least this long after tapping Follow
 const FOLLOW_FALLBACK_SECONDS = 15;  // used if the browser never reports the visitor leaving the page
-const GATE_KEY = "dpc26_gate_v3";
-const VOTED_KEY = "dpc26_voted_emails_v3";
+const GATE_KEY = "dpc26_gate_v4";
+const VOTED_KEY = "dpc26_voted_emails_v4";
 const GATE_MAX_AGE_MS = 4.5 * 3600 * 1000; // must stay below the server's 5h ticket lifetime
 let followTapAt = 0, followToken = "", followDone = false, leftPageSinceTap = false, followTimer = null;
 

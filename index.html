@@ -1462,9 +1462,10 @@ function parseJwt_(token){
 // (2) only then Google sign-in is shown, (3) only then voting unlocks.
 // The server re-checks the order with a signed ticket (see Code.gs), so this
 // UI cannot be skipped by editing the page.
-const FOLLOW_MIN_SECONDS = 8;        // must wait at least this long after tapping Follow
+const FOLLOW_MIN_SECONDS = 6;        // must wait at least this long after tapping Follow
 const FOLLOW_FALLBACK_SECONDS = 15;  // used if the browser never reports the visitor leaving the page
-const GATE_KEY = "dpc26_gate_v2";
+const GATE_KEY = "dpc26_gate_v3";
+const VOTED_KEY = "dpc26_voted_emails_v3";
 const GATE_MAX_AGE_MS = 4.5 * 3600 * 1000; // must stay below the server's 5h ticket lifetime
 let followTapAt = 0, followToken = "", followDone = false, leftPageSinceTap = false, followTimer = null;
 
@@ -1611,7 +1612,7 @@ $("followBox").addEventListener("change", async () => {
 // a big, clear message, and remembers accounts that voted in this browser so a
 // repeat attempt is explained immediately. Other accounts on the same device
 // are NOT blocked by this.
-const VOTED_KEY = "dpc26_voted_emails_v2";
+
 function votedEmails_(){ try{ return JSON.parse(localStorage.getItem(VOTED_KEY) || "[]"); }catch(e){ return []; } }
 function rememberVoted_(email){
   if(!email) return;
@@ -1897,8 +1898,9 @@ function burst(){
 
   async function submitVote(p){
   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
-  const gps = gpsCache_ || await getGps_();
   busyId = p.id; renderPandals();
+  const gps = gpsCache_ || await getGps_();
+  
   try{
     const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);
     const res = await fetch(SCRIPT_URL, {

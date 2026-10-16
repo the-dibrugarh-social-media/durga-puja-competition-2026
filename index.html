@@ -1464,7 +1464,7 @@ function parseJwt_(token){
 // UI cannot be skipped by editing the page.
 const FOLLOW_MIN_SECONDS = 8;        // must wait at least this long after tapping Follow
 const FOLLOW_FALLBACK_SECONDS = 15;  // used if the browser never reports the visitor leaving the page
-const GATE_KEY = "dpc26_gate_v1";
+const GATE_KEY = "dpc26_gate_v2";
 const GATE_MAX_AGE_MS = 4.5 * 3600 * 1000; // must stay below the server's 5h ticket lifetime
 let followTapAt = 0, followToken = "", followDone = false, leftPageSinceTap = false, followTimer = null;
 
@@ -1611,7 +1611,7 @@ $("followBox").addEventListener("change", async () => {
 // a big, clear message, and remembers accounts that voted in this browser so a
 // repeat attempt is explained immediately. Other accounts on the same device
 // are NOT blocked by this.
-const VOTED_KEY = "dpc26_voted_emails_v1";
+const VOTED_KEY = "dpc26_voted_emails_v2";
 function votedEmails_(){ try{ return JSON.parse(localStorage.getItem(VOTED_KEY) || "[]"); }catch(e){ return []; } }
 function rememberVoted_(email){
   if(!email) return;
@@ -1859,10 +1859,46 @@ function burst(){
   setTimeout(() => box.remove(), 2000);
 }
 
-async function submitVote(p){
+// async function submitVote(p){
+//   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
+//   const gps = gpsCache_ || await getGps_();
+//     busyId = p.id; renderPandals();
+//   try{
+//     const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);
+//     const res = await fetch(SCRIPT_URL, {
+//       method: "POST",
+//       body: JSON.stringify({ idToken: idToken || "", phone: phoneNumber || "", pandalId: p.id, pandalName: p.name,
+//         gps: gps, ip: ip, device: getDeviceInfo_(),
+//         deviceFingerprint: deviceFingerprint, followToken: followToken, followConfirmed: true, rulesAccepted: true })
+//     });
+//     const data = await res.json();
+//     busyId = null;
+//     if(data.status === "success"){
+//       selectedVoted = true; votedId = p.id; votedName = p.name; rememberVoted_(currentEmail_()); renderPandals();
+//       document.getElementById("votedFor").textContent = p.name;
+//       const ty = document.getElementById("thankyouCard");
+//       ty.classList.add("show");
+//       ty.scrollIntoView({behavior:"smooth", block:"center"});
+//       burst();
+//       loadResults();
+//     } else if(data.status === "duplicate"){
+//       rememberVoted_(currentEmail_());
+//       showDup_(data.message || "This Google account has already voted.");
+//     } else {
+//       if(data.code === "follow_required"){ resetGate_(); }
+//       else { renderPandals(); }
+//       showToast(data.message || "Something went wrong — please try again.");
+//     }
+//   }catch(e){
+//     busyId = null; renderPandals();
+//     showToast("Network error — please try again.");
+//   }
+// }
+
+  async function submitVote(p){
   if(!gateOpen()){ showToast("Please complete Step 1 and Step 2 first."); updateGate_(); return; }
   const gps = gpsCache_ || await getGps_();
-    busyId = p.id; renderPandals();
+  busyId = p.id; renderPandals();
   try{
     const [deviceFingerprint, ip] = await Promise.all([computeDeviceFingerprint_(), getIP_()]);
     const res = await fetch(SCRIPT_URL, {
@@ -1874,6 +1910,7 @@ async function submitVote(p){
     const data = await res.json();
     busyId = null;
     if(data.status === "success"){
+      clearGate_();   // the follow token is single-use and now burned server-side
       selectedVoted = true; votedId = p.id; votedName = p.name; rememberVoted_(currentEmail_()); renderPandals();
       document.getElementById("votedFor").textContent = p.name;
       const ty = document.getElementById("thankyouCard");
@@ -1885,8 +1922,13 @@ async function submitVote(p){
       rememberVoted_(currentEmail_());
       showDup_(data.message || "This Google account has already voted.");
     } else {
-      if(data.code === "follow_required"){ resetGate_(); }
-      else { renderPandals(); }
+      if(data.code === "follow_required"){
+        resetGate_();          // stale or used token: send them back to Step 1 cleanly
+      } else if(data.code === "follow_wait"){
+        renderPandals();       // too fast, token is still valid, just ask them to wait
+      } else {
+        renderPandals();
+      }
       showToast(data.message || "Something went wrong — please try again.");
     }
   }catch(e){
@@ -1894,7 +1936,6 @@ async function submitVote(p){
     showToast("Network error — please try again.");
   }
 }
-
 let resultsSig = "";
 async function loadResults(){
   const el = document.getElementById("resultsContainer");

@@ -991,6 +991,12 @@ html.is-scrolling .hero-mandala{animation-play-state:paused !important;}
 .pandal-card.is-dim{opacity:.5;}
 .pandal-card.is-voted{opacity:1; border-color:var(--ok);}
 .pandal-card.is-voted .pandal-state{background:var(--ok); border-color:var(--ok); color:#0F1B10; font-weight:800;}
+  /* top-10: name + optional address stacked */
+.rank-name{align-items:center;}
+.rank-name-wrap{display:flex; flex-direction:column; min-width:0; flex:1;}
+.rank-name-text{display:flex; align-items:center; gap:6px; overflow-wrap:anywhere; line-height:1.3;}
+.rank-area{font-size:11.5px; font-weight:500; color:var(--ink-soft); margin-top:2px; line-height:1.3; overflow-wrap:anywhere;}
+.rank-row.winner .rank-area{color:var(--gold-pale);}
 @media (hover:hover){ .pandal-card:not(.is-busy):hover{border-color:var(--gold); box-shadow:0 0 18px -6px rgba(226,176,74,.55);} }
 </style>
 </head>
@@ -1967,7 +1973,7 @@ async function loadResults(){
       if(r.n !== prev){ rank = i + 1; prev = r.n; }
       return `<div class="rank-row${rank === 1 ? " winner" : ""}" style="--i:${i}">
         <div class="rank-num">${rank}</div>
-        <div class="rank-name">${crownFor(rank - 1)}${esc(r.p.name)}</div>
+        <div class="rank-name"><div class="rank-name-wrap"><div class="rank-name-text">${crownFor(rank - 1)}<span>${esc(r.p.name)}</span></div>${r.p.area && String(r.p.area).trim() ? `<div class="rank-area">${esc(r.p.area)}</div>` : ""}</div></div>
         <div class="rank-count">${r.n} ${r.n === 1 ? "vote" : "votes"}</div>
         <div class="rank-bar" data-pct="${Math.round(r.n / top[0].n * 100)}"></div>
       </div>`;

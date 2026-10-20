@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#7A0C17" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%237A0C17'/%3E%3Cpath d='M50 24c-3 10-14 16-14 30a14 14 0 0 0 28 0c0-14-11-20-14-30z' fill='%23C9A227'/%3E%3Cellipse cx='50' cy='78' rx='22' ry='6' fill='none' stroke='%23C9A227' stroke-width='2'/%3E%3C/svg%3E" />
-<title>Vote Now — Maa Durga Puja Competition 2026 — @the_dibrugarh</title>
+<title>Voting Closed — Maa Durga Puja Competition 2026 — @the_dibrugarh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Kaushan+Script&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet">
@@ -999,10 +999,59 @@ html.is-scrolling .hero-mandala{animation-play-state:paused !important;}
 .rank-row.winner .rank-area{color:var(--gold-pale);}
 @media (hover:hover){ .pandal-card:not(.is-busy):hover{border-color:var(--gold); box-shadow:0 0 18px -6px rgba(226,176,74,.55);} }
 </style>
+
+<style id="voting-closed-css">
+.closed-banner{position:relative;z-index:2;margin:18px 0 6px;padding:26px 18px 22px;border-radius:18px;text-align:center;color:#fff;
+  background:radial-gradient(circle at 50% 0%,rgba(255,214,120,.28),transparent 60%),linear-gradient(135deg,#B3121F,#6E0A14);
+  border:2px solid var(--gold-light);
+  box-shadow:0 0 0 4px rgba(179,18,31,.35),0 18px 40px -14px rgba(0,0,0,.85),0 0 40px -10px rgba(226,176,74,.6);}
+.closed-banner .cb-icon{font-size:54px;line-height:1;margin-bottom:6px}
+.closed-banner h2{font-family:'Cinzel Decorative','Cinzel',serif;font-size:clamp(24px,8vw,36px);line-height:1.15;color:#FFE9A8;
+  letter-spacing:1px;text-shadow:0 2px 0 rgba(60,4,10,.8),0 0 22px rgba(255,200,120,.5);margin:0}
+.closed-banner p{margin:10px auto 0;font-size:14px;max-width:340px;color:var(--gold-pale);line-height:1.5}
+.closed-banner .cb-sub{display:inline-block;margin-top:12px;padding:6px 16px;border-radius:20px;font-weight:700;font-size:12.5px;
+  letter-spacing:.6px;background:rgba(20,0,4,.45);border:1px solid rgba(255,233,168,.6);color:#FFE9A8}
+
+.win-head{text-align:center;margin:4px 0 14px}
+.win-head .wh-crown{font-size:34px}
+.win-head .wh-title{font-family:'Kaushan Script',cursive;font-size:30px;color:#FFF6EA;text-shadow:0 2px 0 rgba(90,10,20,.7),0 0 20px rgba(255,150,110,.4)}
+.win-head .wh-sub{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:6px 0 18px}
+.pod{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center}
+.pod .pod-medal{font-size:30px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
+.pod.p1 .pod-medal{font-size:42px}
+.pod .pod-name{font-weight:800;font-size:12.5px;line-height:1.25;margin:6px 2px 2px;overflow-wrap:anywhere;color:var(--ink)}
+.pod.p1 .pod-name{font-size:14.5px;color:var(--gold-light)}
+.pod .pod-area{font-size:10.5px;color:var(--ink-soft);margin-bottom:6px;overflow-wrap:anywhere}
+.pod .pod-votes{font-family:'Cinzel',serif;font-weight:700;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:6px;
+  background:var(--maroon-dark);border:1px solid var(--gold);color:var(--gold-pale)}
+.pod .pod-block{width:100%;border-radius:10px 10px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:8px;
+  font-family:'Cinzel',serif;font-weight:900;font-size:26px;color:#3B060C;border:1px solid rgba(255,246,234,.5);border-bottom:none}
+.pod.p1 .pod-block{height:112px;background:linear-gradient(180deg,#FFF0B8,#E2B04A 55%,#A9741F);box-shadow:0 0 28px -4px rgba(255,214,120,.8)}
+.pod.p2 .pod-block{height:82px;background:linear-gradient(180deg,#F4F4F4,#BFC3C9 55%,#7F858D)}
+.pod.p3 .pod-block{height:62px;background:linear-gradient(180deg,#F2C79A,#C47F45 55%,#85501F)}
+.pod.p1{flex:1.25}
+.win-list{margin-top:4px}
+.win-row{display:flex;align-items:center;gap:12px;padding:11px 10px;border-bottom:1px solid var(--bronze);border-radius:6px;
+  animation:rowIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
+.win-row:last-child{border-bottom:none}
+.win-row .wr-num{width:30px;height:30px;flex:none;border-radius:50%;background:var(--bg-deep);border:1.5px solid var(--gold);color:var(--gold-light);
+  font-family:'Cinzel',serif;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.win-row .wr-info{flex:1;min-width:0}
+.win-row .wr-name{font-weight:700;font-size:13.5px;color:var(--ink);overflow-wrap:anywhere;line-height:1.3}
+.win-row .wr-area{font-size:11.5px;color:var(--ink-soft);margin-top:2px;overflow-wrap:anywhere}
+.win-row .wr-votes{font-family:'Cinzel',serif;background:var(--maroon-dark);color:var(--gold-pale);border:1px solid var(--bronze);
+  padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;flex:none}
+.win-note{text-align:center;font-size:12.5px;color:var(--ink-soft);margin-top:14px;line-height:1.6}
+.win-note b{color:var(--gold-light)}
+.win-msg{text-align:center;font-size:13px;color:var(--ink-soft);padding:18px 0}
+</style>
+
 </head>
 <body class="vs-lock">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-japi" viewBox="0 0 64 44"><path d="M32 3L61 33Q32 42 3 33Z" fill="#E8C878" stroke="#8F3B30" stroke-width="1.4"/><path d="M32 3L20 36M32 3L32 38M32 3L44 36M32 3L10 34M32 3L54 34" stroke="#B7873A" stroke-width=".8" fill="none"/><path d="M9 27Q32 35 55 27" fill="none" stroke="#B10F1E" stroke-width="5"/><path d="M6.5 32.5Q32 41 57.5 32.5" fill="none" stroke="#2E7D32" stroke-width="2.6"/><path d="M14 28.6Q32 34 50 28.6" fill="none" stroke="#FFF6EA" stroke-width="1" stroke-dasharray="2 3"/><circle cx="32" cy="3" r="2.8" fill="#B10F1E" stroke="#E8A33D" stroke-width=".8"/></symbol><symbol id="i-mandala-fancy" viewBox="-50 -50 100 100"><circle r="49" fill="#7A0C18" stroke="#E8A33D" stroke-width="1.6"/><circle r="45.6" fill="none" stroke="#FFF6EA" stroke-width="0.8"/><circle cx="0.00" cy="-42.60" r="1.35" fill="#FFF6EA"/><circle cx="8.31" cy="-41.78" r="1.35" fill="#FFF6EA"/><circle cx="16.30" cy="-39.36" r="1.35" fill="#FFF6EA"/><circle cx="23.67" cy="-35.42" r="1.35" fill="#FFF6EA"/><circle cx="30.12" cy="-30.12" r="1.35" fill="#FFF6EA"/><circle cx="35.42" cy="-23.67" r="1.35" fill="#FFF6EA"/><circle cx="39.36" cy="-16.30" r="1.35" fill="#FFF6EA"/><circle cx="41.78" cy="-8.31" r="1.35" fill="#FFF6EA"/><circle cx="42.60" cy="-0.00" r="1.35" fill="#FFF6EA"/><circle cx="41.78" cy="8.31" r="1.35" fill="#FFF6EA"/><circle cx="39.36" cy="16.30" r="1.35" fill="#FFF6EA"/><circle cx="35.42" cy="23.67" r="1.35" fill="#FFF6EA"/><circle cx="30.12" cy="30.12" r="1.35" fill="#FFF6EA"/><circle cx="23.67" cy="35.42" r="1.35" fill="#FFF6EA"/><circle cx="16.30" cy="39.36" r="1.35" fill="#FFF6EA"/><circle cx="8.31" cy="41.78" r="1.35" fill="#FFF6EA"/><circle cx="0.00" cy="42.60" r="1.35" fill="#FFF6EA"/><circle cx="-8.31" cy="41.78" r="1.35" fill="#FFF6EA"/><circle cx="-16.30" cy="39.36" r="1.35" fill="#FFF6EA"/><circle cx="-23.67" cy="35.42" r="1.35" fill="#FFF6EA"/><circle cx="-30.12" cy="30.12" r="1.35" fill="#FFF6EA"/><circle cx="-35.42" cy="23.67" r="1.35" fill="#FFF6EA"/><circle cx="-39.36" cy="16.30" r="1.35" fill="#FFF6EA"/><circle cx="-41.78" cy="8.31" r="1.35" fill="#FFF6EA"/><circle cx="-42.60" cy="0.00" r="1.35" fill="#FFF6EA"/><circle cx="-41.78" cy="-8.31" r="1.35" fill="#FFF6EA"/><circle cx="-39.36" cy="-16.30" r="1.35" fill="#FFF6EA"/><circle cx="-35.42" cy="-23.67" r="1.35" fill="#FFF6EA"/><circle cx="-30.12" cy="-30.12" r="1.35" fill="#FFF6EA"/><circle cx="-23.67" cy="-35.42" r="1.35" fill="#FFF6EA"/><circle cx="-16.30" cy="-39.36" r="1.35" fill="#FFF6EA"/><circle cx="-8.31" cy="-41.78" r="1.35" fill="#FFF6EA"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(0.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(0.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(22.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(22.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(45.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(45.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(67.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(67.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(90.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(90.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(112.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(112.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(135.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(135.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(157.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(157.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(180.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(180.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(202.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(202.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(225.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(225.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(247.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(247.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(270.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(270.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(292.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(292.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(315.00)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(315.00)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -13.00 C7.20 -20.00 7.20 -32.60 0 -41.00 C-7.20 -32.60 -7.20 -20.00 0 -13.00 Z" transform="rotate(337.50)" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.7"/><path d="M0 -20.00 C2.60 -23.75 2.60 -30.50 0 -35.00 C-2.60 -30.50 -2.60 -23.75 0 -20.00 Z" transform="rotate(337.50)" fill="#B10F1E" stroke="#B10F1E" stroke-width="0.2"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(11.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(33.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(56.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(78.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(101.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(123.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(146.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(168.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(191.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(213.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(236.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(258.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(281.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(303.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(326.25)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -11.00 C5.20 -16.00 5.20 -25.00 0 -31.00 C-5.20 -25.00 -5.20 -16.00 0 -11.00 Z" transform="rotate(348.75)" fill="#E8A33D" stroke="#B10F1E" stroke-width="0.5"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(22.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(67.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(112.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(157.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(202.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(247.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(292.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -9.00 C4.80 -12.75 4.80 -19.50 0 -24.00 C-4.80 -19.50 -4.80 -12.75 0 -9.00 Z" transform="rotate(337.50)" fill="#B10F1E" stroke="#FFF6EA" stroke-width="0.6"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(0)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(45)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(90)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(135)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(180)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(225)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(270)" fill="#2E7D32"/><path d="M0 -33.5 l2.1 2.6 l-2.1 2.6 l-2.1 -2.6z" transform="rotate(315)" fill="#2E7D32"/><circle r="10.5" fill="#FFF6EA" stroke="#E8A33D" stroke-width="0.8"/><circle cx="0.00" cy="-8.20" r="0.9" fill="#B10F1E"/><circle cx="4.10" cy="-7.10" r="0.9" fill="#B10F1E"/><circle cx="7.10" cy="-4.10" r="0.9" fill="#B10F1E"/><circle cx="8.20" cy="-0.00" r="0.9" fill="#B10F1E"/><circle cx="7.10" cy="4.10" r="0.9" fill="#B10F1E"/><circle cx="4.10" cy="7.10" r="0.9" fill="#B10F1E"/><circle cx="0.00" cy="8.20" r="0.9" fill="#B10F1E"/><circle cx="-4.10" cy="7.10" r="0.9" fill="#B10F1E"/><circle cx="-7.10" cy="4.10" r="0.9" fill="#B10F1E"/><circle cx="-8.20" cy="0.00" r="0.9" fill="#B10F1E"/><circle cx="-7.10" cy="-4.10" r="0.9" fill="#B10F1E"/><circle cx="-4.10" cy="-7.10" r="0.9" fill="#B10F1E"/><circle r="5.6" fill="#B10F1E"/><circle r="3.6" fill="#E8A33D"/><circle r="1.6" fill="#FFF6EA"/></symbol><radialGradient id="mandalaGlow"><stop offset="0" stop-color="#FFD98A" stop-opacity=".55"/><stop offset="1" stop-color="#FFD98A" stop-opacity="0"/></radialGradient></defs></svg>
-<div class="cz" id="cz" role="dialog" aria-modal="true" aria-label="Tap anywhere to Vote for your Favorite Pandal">
+<div class="cz" id="cz" role="dialog" aria-modal="true" aria-label="Voting has closed — tap anywhere to see the Winners">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
       <filter id="waxShape" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
@@ -1081,12 +1130,12 @@ html.is-scrolling .hero-mandala{animation-play-state:paused !important;}
       <div class="cz-spark" id="czSpark" aria-hidden="true"></div>
     </div>
     <div class="cz-seam"><svg viewBox="-100 -30 200 240" aria-hidden="true" id="czSeamSvg"></svg></div>
-    <button type="button" class="cz-seal" id="czSeal" aria-label="Tap anywhere to Vote for your Favorite Pandal">
+    <button type="button" class="cz-seal" id="czSeal" aria-label="Voting has closed — tap anywhere to see the Winners">
       <span class="cz-seal-whole"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
       <span class="cz-seal-half hl"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
       <span class="cz-seal-half hr"><svg viewBox="0 0 120 120"><use href="#waxSeal" width="120" height="120"/></svg></span>
     </button>
-    <p class="cz-hint">Tap anywhere to Vote for your Favorite Pandal</p>
+    <p class="cz-hint">Voting has closed — tap anywhere to see the Winners</p>
   </div>
 </div>
 <div class="scrollbar" aria-hidden="true"><i id="scrollBar"></i></div>
@@ -2267,5 +2316,115 @@ window.addEventListener("DOMContentLoaded", async () => {
   }, {passive:true});
 })();
 </script>
+<!-- VOTING-CLOSED-PATCH -->
+<script id="voting-closed-js">
+(function(){
+  var FROZEN = null;               // null => fetch final counts once from the backend
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var esc = function(t){ return String(t == null ? "" : t).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+  // ---- 1. switch every voting function off (globals are looked up at call time) ----
+  window.onVoteClick   = function(){ try{ showToast("Voting has closed. Thank you!"); }catch(e){} };
+  window.submitVote    = function(){ return Promise.resolve(); };
+  window.openRules     = function(){};
+  window.loadResults   = function(){};     // stops the 15s polling loop
+  window.initGoogle    = function(){};     // no Google sign-in
+  window.loadPandals   = function(){ return Promise.resolve(); };
+  window.renderPandals = function(){};
+
+  // ---- 2. restyle the page ----
+  function patchPage(){
+    var wrap = $(".wrap"); if(!wrap) return;
+    Array.prototype.slice.call(wrap.children).forEach(function(el){
+      if(el.classList.contains("card") || el.classList.contains("mini-div")) el.style.display = "none";
+    });
+    var pill = $(".dates-pill");
+    if(pill){ pill.innerHTML = "\uD83D\uDD12 Voting Has Closed \u2014 Thank You!"; }
+
+    var banner = document.createElement("div");
+    banner.className = "closed-banner"; banner.setAttribute("role","status");
+    banner.innerHTML =
+      '<div class="cb-icon">\uD83D\uDEAB</div>' +
+      '<h2>VOTING HAS<br>STOPPED</h2>' +
+      '<p>Thank you to everyone who voted for Dibrugarh\u2019s favourite Durga Puja pandal. No more votes are being accepted.</p>' +
+      '<span class="cb-sub">FINAL RESULTS BELOW \u2193</span>';
+
+    var card = document.createElement("div");
+    card.className = "card"; card.id = "winnersCard";
+    card.innerHTML = '<div class="card-inner">' +
+      '<div class="win-head"><div class="wh-crown">\uD83D\uDC51</div>' +
+      '<div class="wh-title">Top 10 Pandals of 2026</div>' +
+      '<div class="wh-sub" id="winSub">Final standings</div></div>' +
+      '<div id="winBody"><div class="win-msg">Counting the final votes\u2026</div></div>' +
+      '<div class="win-note">Congratulations to all pandals! Follow <b>@the_dibrugarh</b> for the official announcement. Jai Maa Durga \uD83E\uDE94</div>' +
+      '</div>';
+
+    var hero = $(".hero");
+    var anchor = hero && hero.parentNode === wrap ? hero : null;
+    if(anchor){ anchor.after(banner); banner.after(card); }
+    else { wrap.prepend(card); wrap.prepend(banner); }
+  }
+
+  // ---- 3. results ----
+  function rankIt(rows){
+    rows = rows.filter(function(r){ return r.n > 0; })
+      .sort(function(a,b){ return b.n - a.n || String(a.name).localeCompare(String(b.name)); })
+      .slice(0, 10);
+    var rank = 0, prev = null;
+    rows.forEach(function(r, i){ if(r.n !== prev){ rank = i + 1; prev = r.n; } r.rank = rank; });
+    return rows;
+  }
+  function votesTxt(n){ return n + (n === 1 ? " vote" : " votes"); }
+  function medal(rank){ return rank === 1 ? "\uD83E\uDD47" : rank === 2 ? "\uD83E\uDD48" : "\uD83E\uDD49"; }
+
+  function render(rows, total){
+    var body = $("#winBody"), sub = $("#winSub");
+    if(!rows.length){ body.innerHTML = '<div class="win-msg">No votes were recorded.</div>'; return; }
+    if(total) sub.textContent = "Final standings \u00B7 " + total + " total votes";
+    var top3 = rows.slice(0, 3), rest = rows.slice(3);
+    // podium order: 2nd, 1st, 3rd
+    var order = [top3[1], top3[0], top3[2]].filter(Boolean);
+    var pod = '<div class="podium">' + order.map(function(r){
+      var cls = r === top3[0] ? "p1" : (r === top3[1] ? "p2" : "p3");
+      return '<div class="pod ' + cls + '"><div class="pod-medal">' + medal(Math.min(r.rank,3)) + '</div>' +
+        '<div class="pod-name">' + esc(r.name) + '</div>' +
+        (r.area ? '<div class="pod-area">' + esc(r.area) + '</div>' : '') +
+        '<div class="pod-votes">' + votesTxt(r.n) + '</div>' +
+        '<div class="pod-block">' + r.rank + '</div></div>';
+    }).join("") + '</div>';
+    var list = rest.length ? '<div class="win-list">' + rest.map(function(r, i){
+      return '<div class="win-row" style="--i:' + i + '"><div class="wr-num">' + r.rank + '</div>' +
+        '<div class="wr-info"><div class="wr-name">' + esc(r.name) + '</div>' +
+        (r.area ? '<div class="wr-area">' + esc(r.area) + '</div>' : '') + '</div>' +
+        '<div class="wr-votes">' + votesTxt(r.n) + '</div></div>';
+    }).join("") + '</div>' : '';
+    body.innerHTML = pod + list;
+  }
+
+  function load(){
+    if(FROZEN){
+      var rows = FROZEN.map(function(r){ return { name:r.name, area:r.area || "", n:Number(r.votes) || 0 }; });
+      var total = rows.reduce(function(t, r){ return t + r.n; }, 0);
+      render(rankIt(rows), total); return;
+    }
+    Promise.all([
+      fetch(SCRIPT_URL + "?pandals=1").then(function(r){ return r.json(); }),
+      fetch(SCRIPT_URL + "?t=" + Date.now()).then(function(r){ return r.json(); })
+    ]).then(function(res){
+      var ps = (res[0].pandals || []), counts = res[1] || {};
+      var rows = ps.map(function(p){ return { name:p.name, area:p.area || "", n:Number(counts[p.id]) || 0 }; });
+      var total = rows.reduce(function(t, r){ return t + r.n; }, 0);
+      render(rankIt(rows), total);
+    }).catch(function(){
+      $("#winBody").innerHTML = '<div class="win-msg">Could not load the results right now \u2014 please refresh.</div>';
+    });
+  }
+
+  function start(){ patchPage(); load(); }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
+
 </body>
 </html>
